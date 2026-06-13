@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decades — What Was #1?</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0f0f0f;
+      --surface:   #1a1a1a;
+      --surface2:  #242424;
+      --border:    #2e2e2e;
+      --accent:    #c8a84b;
+      --accent2:   #e0c97a;
+      --text:      #e8e8e8;
+      --muted:     #888;
+      --subtle:    #555;
+      --red:       #e05c5c;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      padding: 0 1rem 4rem;
+    }
+
+    /* ── Header ── */
+    header {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    header p {
+      margin-top: 0.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── Picker form ── */
+    .picker {
+      max-width: 720px;
+      margin: 2rem auto 0;
+    }
+
+    .picker-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .picker label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .picker select {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem 2rem 0.6rem 0.85rem;
+      font-size: 1rem;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.7rem center;
+      cursor: pointer;
+      min-width: 130px;
+    }
+
+    .picker select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .picker button {
+      background: var(--accent);
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .picker button:hover {
+      background: var(--accent2);
+    }
+
+    /* ── Results ── */
+    #results {
+      max-width: 720px;
+      margin: 2.5rem auto 0;
+    }
+
+    .results-header {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.4rem;
+      margin-bottom: 0.75rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem 1rem;
+      align-items: start;
+      transition: border-color 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--subtle);
+    }
+
+    /* First card gets accent border */
+    .card:first-child {
+      border-color: var(--accent);
+      background: #1e1b13;
+    }
+
+    .card-main {}
+
+    .card-year {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .card:first-child .card-year {
+      color: var(--accent2);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .card-artist {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.6rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .card-chart {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+
+    .card-age {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* YouTube link */
+    .card-yt {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.5rem 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+      align-self: start;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .card-yt:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .card-yt svg {
+      flex-shrink: 0;
+    }
+
+    /* ── No data state ── */
+    .no-data {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    /* ── Floor note ── */
+    .floor-note {
+      font-size: 0.78rem;
+      color: var(--subtle);
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Error ── */
+    .error-msg {
+      background: #2a1a1a;
+      border: 1px solid #5a2a2a;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      color: var(--red);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Decades<span>.</span></h1>
+  <p>Pick a month and year — see the #1 song, then follow it back through time decade by decade.</p>
+</header>
+
+<section class="picker">
+  <form id="picker-form">
+    <div class="picker-row">
+      <div>
+        <label for="month-select">Month</label>
+        <select id="month-select">
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+      <div>
+        <label for="year-select">Year</label>
+        <select id="year-select">
+          <!-- populated by JS -->
+        </select>
+      </div>
+      <button type="submit">Go</button>
+    </div>
+  </form>
+  <div id="form-error" class="error-msg" style="display:none;"></div>
+</section>
+
+<section id="results"></section>
+
+<script>
+// ─────────────────────────────────────────────
+// DECADES — Chart Data
+// Source: Billboard Best Sellers (1940–1957), Billboard Hot 100 (1958–present)
+// Format: chartData[year][month] = { title, artist, chart }
+// Month is 1-indexed. 1940 data begins July (month 7).
+// ─────────────────────────────────────────────
+
+const chartData = {
+  1940: {
+    7:  { title: "I'll Never Smile Again", artist: "Tommy Dorsey", chart: "Best Selling Singles" },
+    8:  { title: "I'll Never Smile Again", artist: "Tommy Dorsey", chart: "Best Selling Singles" },
+    9:  { title: "I'll Never Smile Again", artist: "Tommy Dorsey", chart: "Best Selling Singles" },
+    10: { title: "Only Forever", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    11: { title: "Only Forever", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    12: { title: "Only Forever", artist: "Bing Crosby", chart: "Best Selling Singles" }
+  },
+  1941: {
+    1:  { title: "Only Forever", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    2:  { title: "Amapola", artist: "Jimmy Dorsey", chart: "Best Selling Singles" },
+    3:  { title: "Amapola", artist: "Jimmy Dorsey", chart: "Best Selling Singles" },
+    4:  { title: "Amapola", artist: "Jimmy Dorsey", chart: "Best Selling Singles" },
+    5:  { title: "Intermezzo", artist: "Guy Lombardo", chart: "Best Selling Singles" },
+    6:  { title: "Intermezzo", artist: "Guy Lombardo", chart: "Best Selling Singles" },
+    7:  { title: "Green Eyes", artist: "Jimmy Dorsey", chart: "Best Selling Singles" },
+    8:  { title: "Green Eyes", artist: "Jimmy Dorsey", chart: "Best Selling Singles" },
+    9:  { title: "I Don't Want to Set the World on Fire", artist: "The Ink Spots", chart: "Best Selling Singles" },
+    10: { title: "I Don't Want to Set the World on Fire", artist: "The Ink Spots", chart: "Best Selling Singles" },
+    11: { title: "Chattanooga Choo Choo", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    12: { title: "Chattanooga Choo Choo", artist: "Glenn Miller", chart: "Best Selling Singles" }
+  },
+  1942: {
+    1:  { title: "Chattanooga Choo Choo", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    2:  { title: "A String of Pearls", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    3:  { title: "A String of Pearls", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    4:  { title: "A String of Pearls", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    5:  { title: "Sleepy Lagoon", artist: "Harry James", chart: "Best Selling Singles" },
+    6:  { title: "Sleepy Lagoon", artist: "Harry James", chart: "Best Selling Singles" },
+    7:  { title: "Don't Sit Under the Apple Tree", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    8:  { title: "Don't Sit Under the Apple Tree", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    9:  { title: "Strip Polka", artist: "Kay Kyser", chart: "Best Selling Singles" },
+    10: { title: "Strip Polka", artist: "Kay Kyser", chart: "Best Selling Singles" },
+    11: { title: "White Christmas", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    12: { title: "White Christmas", artist: "Bing Crosby", chart: "Best Selling Singles" }
+  },
+  1943: {
+    1:  { title: "White Christmas", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    2:  { title: "There Are Such Things", artist: "Tommy Dorsey ft. Frank Sinatra", chart: "Best Selling Singles" },
+    3:  { title: "There Are Such Things", artist: "Tommy Dorsey ft. Frank Sinatra", chart: "Best Selling Singles" },
+    4:  { title: "I Had the Craziest Dream", artist: "Harry James", chart: "Best Selling Singles" },
+    5:  { title: "I Had the Craziest Dream", artist: "Harry James", chart: "Best Selling Singles" },
+    6:  { title: "That Old Black Magic", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    7:  { title: "That Old Black Magic", artist: "Glenn Miller", chart: "Best Selling Singles" },
+    8:  { title: "It Can't Be Wrong", artist: "Dick Haymes", chart: "Best Selling Singles" },
+    9:  { title: "It Can't Be Wrong", artist: "Dick Haymes", chart: "Best Selling Singles" },
+    10: { title: "Pistol Packin' Mama", artist: "Al Dexter", chart: "Best Selling Singles" },
+    11: { title: "Paper Doll", artist: "The Mills Brothers", chart: "Best Selling Singles" },
+    12: { title: "Paper Doll", artist: "The Mills Brothers", chart: "Best Selling Singles" }
+  },
+  1944: {
+    1:  { title: "Paper Doll", artist: "The Mills Brothers", chart: "Best Selling Singles" },
+    2:  { title: "Shoo-Shoo Baby", artist: "The Andrews Sisters", chart: "Best Selling Singles" },
+    3:  { title: "Besame Mucho", artist: "Jimmy Dorsey", chart: "Best Selling Singles" },
+    4:  { title: "Besame Mucho", artist: "Jimmy Dorsey", chart: "Best Selling Singles" },
+    5:  { title: "I Love You", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    6:  { title: "I'll Get By", artist: "Harry James", chart: "Best Selling Singles" },
+    7:  { title: "I'll Be Seeing You", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    8:  { title: "Swinging on a Star", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    9:  { title: "Swinging on a Star", artist: "Bing Crosby", chart: "Best Selling Singles" },
+    10: { title: "You Always Hurt the One You Love", artist: "The Mills Brothers", chart: "Best Selling Singles" },
+    11: { title: "I'm Making Believe", artist: "Ella Fitzgerald & The Ink Spots", chart: "Best Selling Singles" },
+    12: { title: "Don't Fence Me In", artist: "Bing Crosby & The Andrews Sisters", chart: "Best Selling Singles" }
+  },
+  1945: {
+    1:  { title: "Don't Fence Me In", artist: "Bing Crosby & The Andrews Sisters", chart: "Best Selling Singles" },
+    2:  { title: "Rum and Coca-Cola", artist: "The Andrews Sisters", chart: "Best Selling Singles" },
+    3:  { title: "Rum and Coca-Cola", artist: "The Andrews Sisters", chart: "Best Selling Singles" },
+    4:  { title: "Rum and Coca-Cola", artist: "The Andrews Sisters", chart: "Best Selling Singles" },
+    5:  { title: "My Dreams Are Getting Better All the Time", artist: "Les Brown", chart: "Best Selling Singles" },
+    6:  { title: "Sentimental Journey", artist: "Les Brown ft. Doris Day", chart: "Best Selling Singles" },
+    7:  { title: "Sentimental Journey", artist: "Les Brown ft. Doris Day", chart: "Best Selling Singles" },
+    8:  { title: "Till the End of Time", artist: "Perry Como", chart: "Best Selling Singles" },
+    9:  { title: "Till the End of Time", artist: "Perry Como", chart: "Best Selling Singles" },
+    10: { title: "On the Atchison, Topeka and the Santa Fe", artist: "Johnny Mercer", chart: "Best Selling Singles" },
+    11: { title: "It's Been a Long, Long Time", artist: "Harry James", chart: "Best Selling Singles" },
+    12: { title: "It's Been a Long, Long Time", artist: "Harry James", chart: "Best Selling Singles" }
+  },
+  1946: {
+    1:  { title: "Personality", artist: "Johnny Mercer & The Pied Pipers", chart: "Best Selling Singles" },
+    2:  { title: "Personality", artist: "Johnny Mercer & The Pied Pipers", chart: "Best Selling Singles" },
+    3:  { title: "Oh! What It Seemed to Be", artist: "Frankie Carle", chart: "Best Selling Singles" },
+    4:  { title: "Oh! What It Seemed to Be", artist: "Frankie Carle", chart: "Best Selling Singles" },
+    5:  { title: "Five Minutes More", artist: "Frank Sinatra", chart: "Best Selling Singles" },
+    6:  { title: "Five Minutes More", artist: "Frank Sinatra", chart: "Best Selling Singles" },
+    7:  { title: "The Gypsy", artist: "The Ink Spots", chart: "Best Selling Singles" },
+    8:  { title: "The Gypsy", artist: "The Ink Spots", chart: "Best Selling Singles" },
+    9:  { title: "To Each His Own", artist: "Eddy Howard", chart: "Best Selling Singles" },
+    10: { title: "To Each His Own", artist: "Eddy Howard", chart: "Best Selling Singles" },
+    11: { title: "Ole Buttermilk Sky", artist: "Kay Kyser", chart: "Best Selling Singles" },
+    12: { title: "Christmas Song", artist: "Nat King Cole Trio", chart: "Best Selling Singles" }
+  },
+  1947: {
+    1:  { title: "Christmas Song", artist: "Nat King Cole Trio", chart: "Best Selling Singles" },
+    2:  { title: "Managua Nicaragua", artist: "Freddy Martin", chart: "Best Selling Singles" },
+    3:  { title: "Managua Nicaragua", artist: "Freddy Martin", chart: "Best Selling Singles" },
+    4:  { title: "Peg O' My Heart", artist: "The Harmonicats", chart: "Best Selling Singles" },
+    5:  { title: "Peg O' My Heart", artist: "The Harmonicats", chart: "Best Selling Singles" },
+    6:  { title: "Peg O' My Heart", artist: "The Harmonicats", chart: "Best Selling Singles" },
+    7:  { title: "That's My Desire", artist: "Frankie Laine", chart: "Best Selling Singles" },
+    8:  { title: "That's My Desire", artist: "Frankie Laine", chart: "Best Selling Singles" },
+    9:  { title: "Near You", artist: "Francis Craig", chart: "Best Selling Singles" },
+    10: { title: "Near You", artist: "Francis Craig", chart: "Best Selling Singles" },
+    11: { title: "Near You", artist: "Francis Craig", chart: "Best Selling Singles" },
+    12: { title: "Near You", artist: "Francis Craig", chart: "Best Selling Singles" }
+  },
+  1948: {
+    1:  { title: "Near You", artist: "Francis Craig", chart: "Best Selling Singles" },
+    2:  { title: "Heartbreaker", artist: "Ted Weems", chart: "Best Selling Singles" },
+    3:  { title: "Heartbreaker", artist: "Ted Weems", chart: "Best Selling Singles" },
+    4:  { title: "Beneath the Lights of Home", artist: "Gordon MacRae", chart: "Best Selling Singles" },
+    5:  { title: "Beneath the Lights of Home", artist: "Gordon MacRae", chart: "Best Selling Singles" },
+    6:  { title: "You Can't Be True, Dear", artist: "Ken Griffin", chart: "Best Selling Singles" },
+    7:  { title: "You Can't Be True, Dear", artist: "Ken Griffin", chart: "Best Selling Singles" },
+    8:  { title: "You Can't Be True, Dear", artist: "Ken Griffin", chart: "Best Selling Singles" },
+    9:  { title: "My Happiness", artist: "Jon & Sondra Steele", chart: "Best Selling Singles" },
+    10: { title: "My Happiness", artist: "Jon & Sondra Steele", chart: "Best Selling Singles" },
+    11: { title: "My Happiness", artist: "Jon & Sondra Steele", chart: "Best Selling Singles" },
+    12: { title: "A Little Bird Told Me", artist: "Evelyn Knight", chart: "Best Selling Singles" }
+  },
+  1949: {
+    1:  { title: "A Little Bird Told Me", artist: "Evelyn Knight", chart: "Best Selling Singles" },
+    2:  { title: "A Little Bird Told Me", artist: "Evelyn Knight", chart: "Best Selling Singles" },
+    3:  { title: "Riders in the Sky", artist: "Vaughn Monroe", chart: "Best Selling Singles" },
+    4:  { title: "Riders in the Sky", artist: "Vaughn Monroe", chart: "Best Selling Singles" },
+    5:  { title: "Riders in the Sky", artist: "Vaughn Monroe", chart: "Best Selling Singles" },
+    6:  { title: "Some Enchanted Evening", artist: "Perry Como", chart: "Best Selling Singles" },
+    7:  { title: "Again", artist: "Doris Day", chart: "Best Selling Singles" },
+    8:  { title: "You're Breaking My Heart", artist: "Vic Damone", chart: "Best Selling Singles" },
+    9:  { title: "That Lucky Old Sun", artist: "Frankie Laine", chart: "Best Selling Singles" },
+    10: { title: "That Lucky Old Sun", artist: "Frankie Laine", chart: "Best Selling Singles" },
+    11: { title: "Mule Train", artist: "Frankie Laine", chart: "Best Selling Singles" },
+    12: { title: "Mule Train", artist: "Frankie Laine", chart: "Best Selling Singles" }
+  },
+  1950: {
+    1:  { title: "Mule Train", artist: "Frankie Laine", chart: "Best Selling Singles" },
+    2:  { title: "Chattanoogie Shoe Shine Boy", artist: "Red Foley", chart: "Best Selling Singles" },
+    3:  { title: "Chattanoogie Shoe Shine Boy", artist: "Red Foley", chart: "Best Selling Singles" },
+    4:  { title: "Rag Mop", artist: "The Ames Brothers", chart: "Best Selling Singles" },
+    5:  { title: "The Third Man Theme", artist: "Anton Karas", chart: "Best Selling Singles" },
+    6:  { title: "The Third Man Theme", artist: "Anton Karas", chart: "Best Selling Singles" },
+    7:  { title: "I Wanna Be Loved", artist: "Andrews Sisters", chart: "Best Selling Singles" },
+    8:  { title: "I Wanna Be Loved", artist: "Andrews Sisters", chart: "Best Selling Singles" },
+    9:  { title: "I'm Moving On", artist: "Hank Snow", chart: "Best Selling Singles" },
+    10: { title: "I'm Moving On", artist: "Hank Snow", chart: "Best Selling Singles" },
+    11: { title: "Harbor Lights", artist: "Sammy Kaye", chart: "Best Selling Singles" },
+    12: { title: "The Tennessee Waltz", artist: "Patti Page", chart: "Best Selling Singles" }
+  },
+  1951: {
+    1:  { title: "The Tennessee Waltz", artist: "Patti Page", chart: "Best Selling Singles" },
+    2:  { title: "The Tennessee Waltz", artist: "Patti Page", chart: "Best Selling Singles" },
+    3:  { title: "If", artist: "Perry Como", chart: "Best Selling Singles" },
+    4:  { title: "If", artist: "Perry Como", chart: "Best Selling Singles" },
+    5:  { title: "On Top of Old Smoky", artist: "The Weavers ft. Terry Gilkyson", chart: "Best Selling Singles" },
+    6:  { title: "On Top of Old Smoky", artist: "The Weavers ft. Terry Gilkyson", chart: "Best Selling Singles" },
+    7:  { title: "Too Young", artist: "Nat King Cole", chart: "Best Selling Singles" },
+    8:  { title: "Come On-a My House", artist: "Rosemary Clooney", chart: "Best Selling Singles" },
+    9:  { title: "Come On-a My House", artist: "Rosemary Clooney", chart: "Best Selling Singles" },
+    10: { title: "Cold, Cold Heart", artist: "Tony Bennett", chart: "Best Selling Singles" },
+    11: { title: "Because of You", artist: "Tony Bennett", chart: "Best Selling Singles" },
+    12: { title: "Because of You", artist: "Tony Bennett", chart: "Best Selling Singles" }
+  },
+  1952: {
+    1:  { title: "Cry", artist: "Johnnie Ray", chart: "Best Selling Singles" },
+    2:  { title: "Cry", artist: "Johnnie Ray", chart: "Best Selling Singles" },
+    3:  { title: "Cry", artist: "Johnnie Ray", chart: "Best Selling Singles" },
+    4:  { title: "Wheel of Fortune", artist: "Kay Starr", chart: "Best Selling Singles" },
+    5:  { title: "Wheel of Fortune", artist: "Kay Starr", chart: "Best Selling Singles" },
+    6:  { title: "Auf Wiederseh'n Sweetheart", artist: "Vera Lynn", chart: "Best Selling Singles" },
+    7:  { title: "Auf Wiederseh'n Sweetheart", artist: "Vera Lynn", chart: "Best Selling Singles" },
+    8:  { title: "Auf Wiederseh'n Sweetheart", artist: "Vera Lynn", chart: "Best Selling Singles" },
+    9:  { title: "You Belong to Me", artist: "Jo Stafford", chart: "Best Selling Singles" },
+    10: { title: "You Belong to Me", artist: "Jo Stafford", chart: "Best Selling Singles" },
+    11: { title: "I Saw Mommy Kissing Santa Claus", artist: "Jimmy Boyd", chart: "Best Selling Singles" },
+    12: { title: "I Saw Mommy Kissing Santa Claus", artist: "Jimmy Boyd", chart: "Best Selling Singles" }
+  },
+  1953: {
+    1:  { title: "Don't Let the Stars Get in Your Eyes", artist: "Perry Como", chart: "Best Selling Singles" },
+    2:  { title: "Don't Let the Stars Get in Your Eyes", artist: "Perry Como", chart: "Best Selling Singles" },
+    3:  { title: "The Doggie in the Window", artist: "Patti Page", chart: "Best Selling Singles" },
+    4:  { title: "The Doggie in the Window", artist: "Patti Page", chart: "Best Selling Singles" },
+    5:  { title: "The Song from Moulin Rouge", artist: "Percy Faith", chart: "Best Selling Singles" },
+    6:  { title: "The Song from Moulin Rouge", artist: "Percy Faith", chart: "Best Selling Singles" },
+    7:  { title: "The Song from Moulin Rouge", artist: "Percy Faith", chart: "Best Selling Singles" },
+    8:  { title: "Vaya Con Dios", artist: "Les Paul & Mary Ford", chart: "Best Selling Singles" },
+    9:  { title: "Vaya Con Dios", artist: "Les Paul & Mary Ford", chart: "Best Selling Singles" },
+    10: { title: "You, You, You", artist: "The Ames Brothers", chart: "Best Selling Singles" },
+    11: { title: "Rags to Riches", artist: "Tony Bennett", chart: "Best Selling Singles" },
+    12: { title: "Rags to Riches", artist: "Tony Bennett", chart: "Best Selling Singles" }
+  },
+  1954: {
+    1:  { title: "Oh! My Pa-Pa", artist: "Eddie Fisher", chart: "Best Selling Singles" },
+    2:  { title: "Oh! My Pa-Pa", artist: "Eddie Fisher", chart: "Best Selling Singles" },
+    3:  { title: "Make Love to Me!", artist: "Jo Stafford", chart: "Best Selling Singles" },
+    4:  { title: "Make Love to Me!", artist: "Jo Stafford", chart: "Best Selling Singles" },
+    5:  { title: "Little Things Mean a Lot", artist: "Kitty Kallen", chart: "Best Selling Singles" },
+    6:  { title: "Little Things Mean a Lot", artist: "Kitty Kallen", chart: "Best Selling Singles" },
+    7:  { title: "Little Things Mean a Lot", artist: "Kitty Kallen", chart: "Best Selling Singles" },
+    8:  { title: "Little Things Mean a Lot", artist: "Kitty Kallen", chart: "Best Selling Singles" },
+    9:  { title: "Sh-Boom", artist: "The Crew-Cuts", chart: "Best Selling Singles" },
+    10: { title: "Hey There", artist: "Rosemary Clooney", chart: "Best Selling Singles" },
+    11: { title: "Hey There", artist: "Rosemary Clooney", chart: "Best Selling Singles" },
+    12: { title: "Mr. Sandman", artist: "The Chordettes", chart: "Best Selling Singles" }
+  },
+  1955: {
+    1:  { title: "Mr. Sandman", artist: "The Chordettes", chart: "Best Selling Singles" },
+    2:  { title: "Sincerely", artist: "The McGuire Sisters", chart: "Best Selling Singles" },
+    3:  { title: "Sincerely", artist: "The McGuire Sisters", chart: "Best Selling Singles" },
+    4:  { title: "The Ballad of Davy Crockett", artist: "Bill Hayes", chart: "Best Selling Singles" },
+    5:  { title: "The Ballad of Davy Crockett", artist: "Bill Hayes", chart: "Best Selling Singles" },
+    6:  { title: "Cherry Pink and Apple Blossom White", artist: "Perez Prado", chart: "Best Selling Singles" },
+    7:  { title: "Rock Around the Clock", artist: "Bill Haley & His Comets", chart: "Best Selling Singles" },
+    8:  { title: "Rock Around the Clock", artist: "Bill Haley & His Comets", chart: "Best Selling Singles" },
+    9:  { title: "Yellow Rose of Texas", artist: "Mitch Miller", chart: "Best Selling Singles" },
+    10: { title: "Love Is a Many-Splendored Thing", artist: "The Four Aces", chart: "Best Selling Singles" },
+    11: { title: "Sixteen Tons", artist: "Tennessee Ernie Ford", chart: "Best Selling Singles" },
+    12: { title: "Sixteen Tons", artist: "Tennessee Ernie Ford", chart: "Best Selling Singles" }
+  },
+  1956: {
+    1:  { title: "Sixteen Tons", artist: "Tennessee Ernie Ford", chart: "Best Selling Singles" },
+    2:  { title: "The Great Pretender", artist: "The Platters", chart: "Best Selling Singles" },
+    3:  { title: "The Great Pretender", artist: "The Platters", chart: "Best Selling Singles" },
+    4:  { title: "Heartbreak Hotel", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    5:  { title: "Heartbreak Hotel", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    6:  { title: "The Wayward Wind", artist: "Gogi Grant", chart: "Best Selling Singles" },
+    7:  { title: "The Wayward Wind", artist: "Gogi Grant", chart: "Best Selling Singles" },
+    8:  { title: "Don't Be Cruel / Hound Dog", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    9:  { title: "Don't Be Cruel / Hound Dog", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    10: { title: "Don't Be Cruel / Hound Dog", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    11: { title: "Don't Be Cruel / Hound Dog", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    12: { title: "Singing the Blues", artist: "Guy Mitchell", chart: "Best Selling Singles" }
+  },
+  1957: {
+    1:  { title: "Singing the Blues", artist: "Guy Mitchell", chart: "Best Selling Singles" },
+    2:  { title: "Too Much", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    3:  { title: "Too Much", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    4:  { title: "Round and Round", artist: "Perry Como", chart: "Best Selling Singles" },
+    5:  { title: "All Shook Up", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    6:  { title: "All Shook Up", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    7:  { title: "Teddy Bear", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    8:  { title: "Teddy Bear", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    9:  { title: "Tammy", artist: "Debbie Reynolds", chart: "Best Selling Singles" },
+    10: { title: "Wake Up Little Susie", artist: "The Everly Brothers", chart: "Best Selling Singles" },
+    11: { title: "Jailhouse Rock", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    12: { title: "At the Hop", artist: "Danny & the Juniors", chart: "Best Selling Singles" }
+  },
+  1958: {
+    1:  { title: "At the Hop", artist: "Danny & the Juniors", chart: "Best Selling Singles" },
+    2:  { title: "Don't / I Beg of You", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    3:  { title: "Don't / I Beg of You", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    4:  { title: "Tequila", artist: "The Champs", chart: "Best Selling Singles" },
+    5:  { title: "Witch Doctor", artist: "David Seville", chart: "Best Selling Singles" },
+    6:  { title: "The Purple People Eater", artist: "Sheb Wooley", chart: "Best Selling Singles" },
+    7:  { title: "Hard Headed Woman", artist: "Elvis Presley", chart: "Best Selling Singles" },
+    8:  { title: "Poor Little Fool", artist: "Ricky Nelson", chart: "Billboard Hot 100" },
+    9:  { title: "It's All in the Game", artist: "Tommy Edwards", chart: "Billboard Hot 100" },
+    10: { title: "It's All in the Game", artist: "Tommy Edwards", chart: "Billboard Hot 100" },
+    11: { title: "It's Only Make Believe", artist: "Conway Twitty", chart: "Billboard Hot 100" },
+    12: { title: "The Chipmunk Song", artist: "The Chipmunks with David Seville", chart: "Billboard Hot 100" }
+  },
+  1959: {
+    1:  { title: "Smoke Gets in Your Eyes", artist: "The Platters", chart: "Billboard Hot 100" },
+    2:  { title: "Stagger Lee", artist: "Lloyd Price", chart: "Billboard Hot 100" },
+    3:  { title: "Venus", artist: "Frankie Avalon", chart: "Billboard Hot 100" },
+    4:  { title: "Come Softly to Me", artist: "The Fleetwoods", chart: "Billboard Hot 100" },
+    5:  { title: "The Happy Organ", artist: "Dave Baby Cortez", chart: "Billboard Hot 100" },
+    6:  { title: "The Battle of New Orleans", artist: "Johnny Horton", chart: "Billboard Hot 100" },
+    7:  { title: "Lonely Boy", artist: "Paul Anka", chart: "Billboard Hot 100" },
+    8:  { title: "A Big Hunk o' Love", artist: "Elvis Presley", chart: "Billboard Hot 100" },
+    9:  { title: "The Three Bells", artist: "The Browns", chart: "Billboard Hot 100" },
+    10: { title: "Mack the Knife", artist: "Bobby Darin", chart: "Billboard Hot 100" },
+    11: { title: "Mack the Knife", artist: "Bobby Darin", chart: "Billboard Hot 100" },
+    12: { title: "Heartaches by the Number", artist: "Guy Mitchell", chart: "Billboard Hot 100" }
+  },
+  1960: {
+    1:  { title: "El Paso", artist: "Marty Robbins", chart: "Billboard Hot 100" },
+    2:  { title: "Running Bear", artist: "Johnny Preston", chart: "Billboard Hot 100" },
+    3:  { title: "Theme from A Summer Place", artist: "Percy Faith", chart: "Billboard Hot 100" },
+    4:  { title: "Theme from A Summer Place", artist: "Percy Faith", chart: "Billboard Hot 100" },
+    5:  { title: "Stuck on You", artist: "Elvis Presley", chart: "Billboard Hot 100" },
+    6:  { title: "Cathy's Clown", artist: "The Everly Brothers", chart: "Billboard Hot 100" },
+    7:  { title: "Alley-Oop", artist: "Hollywood Argyles", chart: "Billboard Hot 100" },
+    8:  { title: "It's Now or Never", artist: "Elvis Presley", chart: "Billboard Hot 100" },
+    9:  { title: "The Twist", artist: "Chubby Checker", chart: "Billboard Hot 100" },
+    10: { title: "Mr. Custer", artist: "Larry Verne", chart: "Billboard Hot 100" },
+    11: { title: "Georgia on My Mind", artist: "Ray Charles", chart: "Billboard Hot 100" },
+    12: { title: "Are You Lonesome Tonight?", artist: "Elvis Presley", chart: "Billboard Hot 100" }
+  },
+  1961: {
+    1:  { title: "Wonderland by Night", artist: "Bert Kaempfert", chart: "Billboard Hot 100" },
+    2:  { title: "Will You Love Me Tomorrow", artist: "The Shirelles", chart: "Billboard Hot 100" },
+    3:  { title: "Pony Time", artist: "Chubby Checker", chart: "Billboard Hot 100" },
+    4:  { title: "Blue Moon", artist: "The Marcels", chart: "Billboard Hot 100" },
+    5:  { title: "Runaway", artist: "Del Shannon", chart: "Billboard Hot 100" },
+    6:  { title: "Travelin' Man", artist: "Ricky Nelson", chart: "Billboard Hot 100" },
+    7:  { title: "Tossin' and Turnin'", artist: "Bobby Lewis", chart: "Billboard Hot 100" },
+    8:  { title: "Tossin' and Turnin'", artist: "Bobby Lewis", chart: "Billboard Hot 100" },
+    9:  { title: "Michael", artist: "The Highwaymen", chart: "Billboard Hot 100" },
+    10: { title: "Hit the Road Jack", artist: "Ray Charles", chart: "Billboard Hot 100" },
+    11: { title: "Runaround Sue", artist: "Dion", chart: "Billboard Hot 100" },
+    12: { title: "Big Bad John", artist: "Jimmy Dean", chart: "Billboard Hot 100" }
+  },
+  1962: {
+    1:  { title: "The Lion Sleeps Tonight", artist: "The Tokens", chart: "Billboard Hot 100" },
+    2:  { title: "Duke of Earl", artist: "Gene Chandler", chart: "Billboard Hot 100" },
+    3:  { title: "Hey! Baby", artist: "Bruce Channel", chart: "Billboard Hot 100" },
+    4:  { title: "Johnny Angel", artist: "Shelley Fabares", chart: "Billboard Hot 100" },
+    5:  { title: "Soldier Boy", artist: "The Shirelles", chart: "Billboard Hot 100" },
+    6:  { title: "I Can't Stop Loving You", artist: "Ray Charles", chart: "Billboard Hot 100" },
+    7:  { title: "I Can't Stop Loving You", artist: "Ray Charles", chart: "Billboard Hot 100" },
+    8:  { title: "Roses Are Red", artist: "Bobby Vinton", chart: "Billboard Hot 100" },
+    9:  { title: "Sherry", artist: "The Four Seasons", chart: "Billboard Hot 100" },
+    10: { title: "Monster Mash", artist: "Bobby Pickett", chart: "Billboard Hot 100" },
+    11: { title: "He's a Rebel", artist: "The Crystals", chart: "Billboard Hot 100" },
+    12: { title: "Big Girls Don't Cry", artist: "The Four Seasons", chart: "Billboard Hot 100" }
+  },
+  1963: {
+    1:  { title: "Go Away Little Girl", artist: "Steve Lawrence", chart: "Billboard Hot 100" },
+    2:  { title: "Hey Paula", artist: "Paul & Paula", chart: "Billboard Hot 100" },
+    3:  { title: "He's So Fine", artist: "The Chiffons", chart: "Billboard Hot 100" },
+    4:  { title: "He's So Fine", artist: "The Chiffons", chart: "Billboard Hot 100" },
+    5:  { title: "If You Wanna Be Happy", artist: "Jimmy Soul", chart: "Billboard Hot 100" },
+    6:  { title: "It's My Party", artist: "Lesley Gore", chart: "Billboard Hot 100" },
+    7:  { title: "Easier Said Than Done", artist: "The Essex", chart: "Billboard Hot 100" },
+    8:  { title: "So Much in Love", artist: "The Tymes", chart: "Billboard Hot 100" },
+    9:  { title: "Blue Velvet", artist: "Bobby Vinton", chart: "Billboard Hot 100" },
+    10: { title: "Sugar Shack", artist: "Jimmy Gilmer & The Fireballs", chart: "Billboard Hot 100" },
+    11: { title: "Sugar Shack", artist: "Jimmy Gilmer & The Fireballs", chart: "Billboard Hot 100" },
+    12: { title: "Dominique", artist: "The Singing Nun", chart: "Billboard Hot 100" }
+  },
+  1964: {
+    1:  { title: "There! I've Said It Again", artist: "Bobby Vinton", chart: "Billboard Hot 100" },
+    2:  { title: "I Want to Hold Your Hand", artist: "The Beatles", chart: "Billboard Hot 100" },
+    3:  { title: "She Loves You", artist: "The Beatles", chart: "Billboard Hot 100" },
+    4:  { title: "Can't Buy Me Love", artist: "The Beatles", chart: "Billboard Hot 100" },
+    5:  { title: "Hello, Dolly!", artist: "Louis Armstrong", chart: "Billboard Hot 100" },
+    6:  { title: "Chapel of Love", artist: "The Dixie Cups", chart: "Billboard Hot 100" },
+    7:  { title: "I Get Around", artist: "The Beach Boys", chart: "Billboard Hot 100" },
+    8:  { title: "A Hard Day's Night", artist: "The Beatles", chart: "Billboard Hot 100" },
+    9:  { title: "The House of the Rising Sun", artist: "The Animals", chart: "Billboard Hot 100" },
+    10: { title: "Oh, Pretty Woman", artist: "Roy Orbison", chart: "Billboard Hot 100" },
+    11: { title: "Baby Love", artist: "The Supremes", chart: "Billboard Hot 100" },
+    12: { title: "Ringo", artist: "Lorne Greene", chart: "Billboard Hot 100" }
+  },
+  1965: {
+    1:  { title: "Come See About Me", artist: "The Supremes", chart: "Billboard Hot 100" },
+    2:  { title: "You've Lost That Lovin' Feelin'", artist: "The Righteous Brothers", chart: "Billboard Hot 100" },
+    3:  { title: "This Diamond Ring", artist: "Gary Lewis & The Playboys", chart: "Billboard Hot 100" },
+    4:  { title: "Stop! In the Name of Love", artist: "The Supremes", chart: "Billboard Hot 100" },
+    5:  { title: "Mrs. Brown You've Got a Lovely Daughter", artist: "Herman's Hermits", chart: "Billboard Hot 100" },
+    6:  { title: "Ticket to Ride", artist: "The Beatles", chart: "Billboard Hot 100" },
+    7:  { title: "(I Can't Get No) Satisfaction", artist: "The Rolling Stones", chart: "Billboard Hot 100" },
+    8:  { title: "(I Can't Get No) Satisfaction", artist: "The Rolling Stones", chart: "Billboard Hot 100" },
+    9:  { title: "Help!", artist: "The Beatles", chart: "Billboard Hot 100" },
+    10: { title: "Eve of Destruction", artist: "Barry McGuire", chart: "Billboard Hot 100" },
+    11: { title: "Yesterday", artist: "The Beatles", chart: "Billboard Hot 100" },
+    12: { title: "Turn! Turn! Turn!", artist: "The Byrds", chart: "Billboard Hot 100" }
+  },
+  1966: {
+    1:  { title: "The Sounds of Silence", artist: "Simon & Garfunkel", chart: "Billboard Hot 100" },
+    2:  { title: "We Can Work It Out / Day Tripper", artist: "The Beatles", chart: "Billboard Hot 100" },
+    3:  { title: "Ballad of the Green Berets", artist: "SSgt Barry Sadler", chart: "Billboard Hot 100" },
+    4:  { title: "Good Lovin'", artist: "The Young Rascals", chart: "Billboard Hot 100" },
+    5:  { title: "Monday Monday", artist: "The Mamas & The Papas", chart: "Billboard Hot 100" },
+    6:  { title: "Paint It Black", artist: "The Rolling Stones", chart: "Billboard Hot 100" },
+    7:  { title: "Strangers in the Night", artist: "Frank Sinatra", chart: "Billboard Hot 100" },
+    8:  { title: "Summer in the City", artist: "The Lovin' Spoonful", chart: "Billboard Hot 100" },
+    9:  { title: "Sunshine Superman", artist: "Donovan", chart: "Billboard Hot 100" },
+    10: { title: "Cherish", artist: "The Association", chart: "Billboard Hot 100" },
+    11: { title: "96 Tears", artist: "? & The Mysterians", chart: "Billboard Hot 100" },
+    12: { title: "Winchester Cathedral", artist: "The New Vaudeville Band", chart: "Billboard Hot 100" }
+  },
+  1967: {
+    1:  { title: "I'm a Believer", artist: "The Monkees", chart: "Billboard Hot 100" },
+    2:  { title: "I'm a Believer", artist: "The Monkees", chart: "Billboard Hot 100" },
+    3:  { title: "Ruby Tuesday", artist: "The Rolling Stones", chart: "Billboard Hot 100" },
+    4:  { title: "Happy Together", artist: "The Turtles", chart: "Billboard Hot 100" },
+    5:  { title: "Something Stupid", artist: "Frank & Nancy Sinatra", chart: "Billboard Hot 100" },
+    6:  { title: "Groovin'", artist: "The Young Rascals", chart: "Billboard Hot 100" },
+    7:  { title: "Windy", artist: "The Association", chart: "Billboard Hot 100" },
+    8:  { title: "Light My Fire", artist: "The Doors", chart: "Billboard Hot 100" },
+    9:  { title: "Ode to Billie Joe", artist: "Bobbie Gentry", chart: "Billboard Hot 100" },
+    10: { title: "The Letter", artist: "The Box Tops", chart: "Billboard Hot 100" },
+    11: { title: "To Sir with Love", artist: "Lulu", chart: "Billboard Hot 100" },
+    12: { title: "Daydream Believer", artist: "The Monkees", chart: "Billboard Hot 100" }
+  },
+  1968: {
+    1:  { title: "Hello, I Love You", artist: "The Doors", chart: "Billboard Hot 100" },
+    2:  { title: "Love Is Blue", artist: "Paul Mauriat", chart: "Billboard Hot 100" },
+    3:  { title: "Love Is Blue", artist: "Paul Mauriat", chart: "Billboard Hot 100" },
+    4:  { title: "(Sittin' On) The Dock of the Bay", artist: "Otis Redding", chart: "Billboard Hot 100" },
+    5:  { title: "Honey", artist: "Bobby Goldsboro", chart: "Billboard Hot 100" },
+    6:  { title: "Mrs. Robinson", artist: "Simon & Garfunkel", chart: "Billboard Hot 100" },
+    7:  { title: "This Guy's in Love with You", artist: "Herb Alpert", chart: "Billboard Hot 100" },
+    8:  { title: "Hello, I Love You", artist: "The Doors", chart: "Billboard Hot 100" },
+    9:  { title: "People Got to Be Free", artist: "The Rascals", chart: "Billboard Hot 100" },
+    10: { title: "Hey Jude", artist: "The Beatles", chart: "Billboard Hot 100" },
+    11: { title: "Hey Jude", artist: "The Beatles", chart: "Billboard Hot 100" },
+    12: { title: "Love Child", artist: "Diana Ross & The Supremes", chart: "Billboard Hot 100" }
+  },
+  1969: {
+    1:  { title: "I Heard It Through the Grapevine", artist: "Marvin Gaye", chart: "Billboard Hot 100" },
+    2:  { title: "Everyday People", artist: "Sly & The Family Stone", chart: "Billboard Hot 100" },
+    3:  { title: "Dizzy", artist: "Tommy Roe", chart: "Billboard Hot 100" },
+    4:  { title: "Aquarius / Let the Sunshine In", artist: "The 5th Dimension", chart: "Billboard Hot 100" },
+    5:  { title: "Aquarius / Let the Sunshine In", artist: "The 5th Dimension", chart: "Billboard Hot 100" },
+    6:  { title: "Get Back", artist: "The Beatles", chart: "Billboard Hot 100" },
+    7:  { title: "In the Ghetto", artist: "Elvis Presley", chart: "Billboard Hot 100" },
+    8:  { title: "Honky Tonk Women", artist: "The Rolling Stones", chart: "Billboard Hot 100" },
+    9:  { title: "Honky Tonk Women", artist: "The Rolling Stones", chart: "Billboard Hot 100" },
+    10: { title: "Sugar Sugar", artist: "The Archies", chart: "Billboard Hot 100" },
+    11: { title: "Sugar Sugar", artist: "The Archies", chart: "Billboard Hot 100" },
+    12: { title: "Na Na Hey Hey Kiss Him Goodbye", artist: "Steam", chart: "Billboard Hot 100" }
+  },
+  1970: {
+    1:  { title: "Raindrops Keep Fallin' on My Head", artist: "B.J. Thomas", chart: "Billboard Hot 100" },
+    2:  { title: "Thank You / Everybody Is a Star", artist: "Sly & The Family Stone", chart: "Billboard Hot 100" },
+    3:  { title: "Bridge Over Troubled Water", artist: "Simon & Garfunkel", chart: "Billboard Hot 100" },
+    4:  { title: "Let It Be", artist: "The Beatles", chart: "Billboard Hot 100" },
+    5:  { title: "ABC", artist: "The Jackson 5", chart: "Billboard Hot 100" },
+    6:  { title: "The Long and Winding Road", artist: "The Beatles", chart: "Billboard Hot 100" },
+    7:  { title: "Mama Told Me (Not to Come)", artist: "Three Dog Night", chart: "Billboard Hot 100" },
+    8:  { title: "(They Long to Be) Close to You", artist: "Carpenters", chart: "Billboard Hot 100" },
+    9:  { title: "War", artist: "Edwin Starr", chart: "Billboard Hot 100" },
+    10: { title: "I'll Be There", artist: "The Jackson 5", chart: "Billboard Hot 100" },
+    11: { title: "I'll Be There", artist: "The Jackson 5", chart: "Billboard Hot 100" },
+    12: { title: "The Tears of a Clown", artist: "Smokey Robinson & The Miracles", chart: "Billboard Hot 100" }
+  },
+  1971: {
+    1:  { title: "My Sweet Lord", artist: "George Harrison", chart: "Billboard Hot 100" },
+    2:  { title: "One Bad Apple", artist: "The Osmonds", chart: "Billboard Hot 100" },
+    3:  { title: "One Bad Apple", artist: "The Osmonds", chart: "Billboard Hot 100" },
+    4:  { title: "Just My Imagination", artist: "The Temptations", chart: "Billboard Hot 100" },
+    5:  { title: "Joy to the World", artist: "Three Dog Night", chart: "Billboard Hot 100" },
+    6:  { title: "Brown Sugar", artist: "The Rolling Stones", chart: "Billboard Hot 100" },
+    7:  { title: "It's Too Late", artist: "Carole King", chart: "Billboard Hot 100" },
+    8:  { title: "How Can You Mend a Broken Heart", artist: "Bee Gees", chart: "Billboard Hot 100" },
+    9:  { title: "Uncle Albert / Admiral Halsey", artist: "Paul & Linda McCartney", chart: "Billboard Hot 100" },
+    10: { title: "Maggie May / Reason to Believe", artist: "Rod Stewart", chart: "Billboard Hot 100" },
+    11: { title: "Gypsies, Tramps & Thieves", artist: "Cher", chart: "Billboard Hot 100" },
+    12: { title: "Family Affair", artist: "Sly & The Family Stone", chart: "Billboard Hot 100" }
+  },
+  1972: {
+    1:  { title: "Brand New Key", artist: "Melanie", chart: "Billboard Hot 100" },
+    2:  { title: "Without You", artist: "Nilsson", chart: "Billboard Hot 100" },
+    3:  { title: "Without You", artist: "Nilsson", chart: "Billboard Hot 100" },
+    4:  { title: "The First Time Ever I Saw Your Face", artist: "Roberta Flack", chart: "Billboard Hot 100" },
+    5:  { title: "The First Time Ever I Saw Your Face", artist: "Roberta Flack", chart: "Billboard Hot 100" },
+    6:  { title: "The Candy Man", artist: "Sammy Davis Jr.", chart: "Billboard Hot 100" },
+    7:  { title: "Lean on Me", artist: "Bill Withers", chart: "Billboard Hot 100" },
+    8:  { title: "Alone Again (Naturally)", artist: "Gilbert O'Sullivan", chart: "Billboard Hot 100" },
+    9:  { title: "Black & White", artist: "Three Dog Night", chart: "Billboard Hot 100" },
+    10: { title: "Ben", artist: "Michael Jackson", chart: "Billboard Hot 100" },
+    11: { title: "I Can See Clearly Now", artist: "Johnny Nash", chart: "Billboard Hot 100" },
+    12: { title: "I Am Woman", artist: "Helen Reddy", chart: "Billboard Hot 100" }
+  },
+  1973: {
+    1:  { title: "You're So Vain", artist: "Carly Simon", chart: "Billboard Hot 100" },
+    2:  { title: "Crocodile Rock", artist: "Elton John", chart: "Billboard Hot 100" },
+    3:  { title: "Killing Me Softly with His Song", artist: "Roberta Flack", chart: "Billboard Hot 100" },
+    4:  { title: "The Night the Lights Went Out in Georgia", artist: "Vicki Lawrence", chart: "Billboard Hot 100" },
+    5:  { title: "Tie a Yellow Ribbon Round the Ole Oak Tree", artist: "Tony Orlando & Dawn", chart: "Billboard Hot 100" },
+    6:  { title: "My Love", artist: "Paul McCartney & Wings", chart: "Billboard Hot 100" },
+    7:  { title: "Will It Go Round in Circles", artist: "Billy Preston", chart: "Billboard Hot 100" },
+    8:  { title: "The Morning After", artist: "Maureen McGovern", chart: "Billboard Hot 100" },
+    9:  { title: "Brother Louie", artist: "Stories", chart: "Billboard Hot 100" },
+    10: { title: "Half-Breed", artist: "Cher", chart: "Billboard Hot 100" },
+    11: { title: "Midnight Train to Georgia", artist: "Gladys Knight & The Pips", chart: "Billboard Hot 100" },
+    12: { title: "Top of the World", artist: "Carpenters", chart: "Billboard Hot 100" }
+  },
+  1974: {
+    1:  { title: "Time in a Bottle", artist: "Jim Croce", chart: "Billboard Hot 100" },
+    2:  { title: "The Way We Were", artist: "Barbra Streisand", chart: "Billboard Hot 100" },
+    3:  { title: "Seasons in the Sun", artist: "Terry Jacks", chart: "Billboard Hot 100" },
+    4:  { title: "Hooked on a Feeling", artist: "Blue Swede", chart: "Billboard Hot 100" },
+    5:  { title: "The Loco-Motion", artist: "Grand Funk Railroad", chart: "Billboard Hot 100" },
+    6:  { title: "Billy, Don't Be a Hero", artist: "Bo Donaldson & The Heywoods", chart: "Billboard Hot 100" },
+    7:  { title: "Annie's Song", artist: "John Denver", chart: "Billboard Hot 100" },
+    8:  { title: "Feel Like Makin' Love", artist: "Roberta Flack", chart: "Billboard Hot 100" },
+    9:  { title: "I Shot the Sheriff", artist: "Eric Clapton", chart: "Billboard Hot 100" },
+    10: { title: "I Honestly Love You", artist: "Olivia Newton-John", chart: "Billboard Hot 100" },
+    11: { title: "Then Came You", artist: "Dionne Warwick & The Spinners", chart: "Billboard Hot 100" },
+    12: { title: "Kung Fu Fighting", artist: "Carl Douglas", chart: "Billboard Hot 100" }
+  },
+  1975: {
+    1:  { title: "Lucy in the Sky with Diamonds", artist: "Elton John", chart: "Billboard Hot 100" },
+    2:  { title: "Fire", artist: "Ohio Players", chart: "Billboard Hot 100" },
+    3:  { title: "Have You Never Been Mellow", artist: "Olivia Newton-John", chart: "Billboard Hot 100" },
+    4:  { title: "Lovin' You", artist: "Minnie Riperton", chart: "Billboard Hot 100" },
+    5:  { title: "He Don't Love You (Like I Love You)", artist: "Tony Orlando & Dawn", chart: "Billboard Hot 100" },
+    6:  { title: "Before the Next Teardrop Falls", artist: "Freddy Fender", chart: "Billboard Hot 100" },
+    7:  { title: "Love Will Keep Us Together", artist: "Captain & Tennille", chart: "Billboard Hot 100" },
+    8:  { title: "Jive Talkin'", artist: "Bee Gees", chart: "Billboard Hot 100" },
+    9:  { title: "Fallin' in Love", artist: "Hamilton, Joe Frank & Reynolds", chart: "Billboard Hot 100" },
+    10: { title: "Fame", artist: "David Bowie", chart: "Billboard Hot 100" },
+    11: { title: "Island Girl", artist: "Elton John", chart: "Billboard Hot 100" },
+    12: { title: "Fly, Robin, Fly", artist: "Silver Convention", chart: "Billboard Hot 100" }
+  },
+  1976: {
+    1:  { title: "Saturday Night", artist: "Bay City Rollers", chart: "Billboard Hot 100" },
+    2:  { title: "50 Ways to Leave Your Lover", artist: "Paul Simon", chart: "Billboard Hot 100" },
+    3:  { title: "Theme from S.W.A.T.", artist: "Rhythm Heritage", chart: "Billboard Hot 100" },
+    4:  { title: "Disco Lady", artist: "Johnnie Taylor", chart: "Billboard Hot 100" },
+    5:  { title: "Welcome Back", artist: "John Sebastian", chart: "Billboard Hot 100" },
+    6:  { title: "Love Hangover", artist: "Diana Ross", chart: "Billboard Hot 100" },
+    7:  { title: "Silly Love Songs", artist: "Wings", chart: "Billboard Hot 100" },
+    8:  { title: "Don't Go Breaking My Heart", artist: "Elton John & Kiki Dee", chart: "Billboard Hot 100" },
+    9:  { title: "Shake Your Booty", artist: "KC & The Sunshine Band", chart: "Billboard Hot 100" },
+    10: { title: "Play That Funky Music", artist: "Wild Cherry", chart: "Billboard Hot 100" },
+    11: { title: "A Fifth of Beethoven", artist: "Walter Murphy", chart: "Billboard Hot 100" },
+    12: { title: "Tonight's the Night (Gonna Be Alright)", artist: "Rod Stewart", chart: "Billboard Hot 100" }
+  },
+  1977: {
+    1:  { title: "Tonight's the Night (Gonna Be Alright)", artist: "Rod Stewart", chart: "Billboard Hot 100" },
+    2:  { title: "I Like Dreamin'", artist: "Kenny Nolan", chart: "Billboard Hot 100" },
+    3:  { title: "Evergreen", artist: "Barbra Streisand", chart: "Billboard Hot 100" },
+    4:  { title: "Dancing Queen", artist: "ABBA", chart: "Billboard Hot 100" },
+    5:  { title: "Don't Leave Me This Way", artist: "Thelma Houston", chart: "Billboard Hot 100" },
+    6:  { title: "Hotel California", artist: "Eagles", chart: "Billboard Hot 100" },
+    7:  { title: "Got to Give It Up", artist: "Marvin Gaye", chart: "Billboard Hot 100" },
+    8:  { title: "I Just Want to Be Your Everything", artist: "Andy Gibb", chart: "Billboard Hot 100" },
+    9:  { title: "Best of My Love", artist: "Emotions", chart: "Billboard Hot 100" },
+    10: { title: "I Feel Love", artist: "Donna Summer", chart: "Billboard Hot 100" },
+    11: { title: "You Light Up My Life", artist: "Debby Boone", chart: "Billboard Hot 100" },
+    12: { title: "You Light Up My Life", artist: "Debby Boone", chart: "Billboard Hot 100" }
+  },
+  1978: {
+    1:  { title: "Baby Come Back", artist: "Player", chart: "Billboard Hot 100" },
+    2:  { title: "Stayin' Alive", artist: "Bee Gees", chart: "Billboard Hot 100" },
+    3:  { title: "Night Fever", artist: "Bee Gees", chart: "Billboard Hot 100" },
+    4:  { title: "Night Fever", artist: "Bee Gees", chart: "Billboard Hot 100" },
+    5:  { title: "If I Can't Have You", artist: "Yvonne Elliman", chart: "Billboard Hot 100" },
+    6:  { title: "You're the One That I Want", artist: "John Travolta & Olivia Newton-John", chart: "Billboard Hot 100" },
+    7:  { title: "Shadow Dancing", artist: "Andy Gibb", chart: "Billboard Hot 100" },
+    8:  { title: "Miss You", artist: "The Rolling Stones", chart: "Billboard Hot 100" },
+    9:  { title: "Grease", artist: "Frankie Valli", chart: "Billboard Hot 100" },
+    10: { title: "Hot Child in the City", artist: "Nick Gilder", chart: "Billboard Hot 100" },
+    11: { title: "MacArthur Park", artist: "Donna Summer", chart: "Billboard Hot 100" },
+    12: { title: "Le Freak", artist: "Chic", chart: "Billboard Hot 100" }
+  },
+  1979: {
+    1:  { title: "Too Much Heaven", artist: "Bee Gees", chart: "Billboard Hot 100" },
+    2:  { title: "Da Ya Think I'm Sexy?", artist: "Rod Stewart", chart: "Billboard Hot 100" },
+    3:  { title: "I Will Survive", artist: "Gloria Gaynor", chart: "Billboard Hot 100" },
+    4:  { title: "What a Fool Believes", artist: "Doobie Brothers", chart: "Billboard Hot 100" },
+    5:  { title: "Reunited", artist: "Peaches & Herb", chart: "Billboard Hot 100" },
+    6:  { title: "Hot Stuff", artist: "Donna Summer", chart: "Billboard Hot 100" },
+    7:  { title: "Ring My Bell", artist: "Anita Ward", chart: "Billboard Hot 100" },
+    8:  { title: "Bad Girls", artist: "Donna Summer", chart: "Billboard Hot 100" },
+    9:  { title: "Good Times", artist: "Chic", chart: "Billboard Hot 100" },
+    10: { title: "My Sharona", artist: "The Knack", chart: "Billboard Hot 100" },
+    11: { title: "Don't Stop 'Til You Get Enough", artist: "Michael Jackson", chart: "Billboard Hot 100" },
+    12: { title: "Rise", artist: "Herb Alpert", chart: "Billboard Hot 100" }
+  },
+  1980: {
+    1:  { title: "Please Don't Go", artist: "KC & The Sunshine Band", chart: "Billboard Hot 100" },
+    2:  { title: "Rock with You", artist: "Michael Jackson", chart: "Billboard Hot 100" },
+    3:  { title: "Crazy Little Thing Called Love", artist: "Queen", chart: "Billboard Hot 100" },
+    4:  { title: "Another Brick in the Wall", artist: "Pink Floyd", chart: "Billboard Hot 100" },
+    5:  { title: "Call Me", artist: "Blondie", chart: "Billboard Hot 100" },
+    6:  { title: "Funkytown", artist: "Lipps Inc.", chart: "Billboard Hot 100" },
+    7:  { title: "Coming Up", artist: "Paul McCartney", chart: "Billboard Hot 100" },
+    8:  { title: "It's Still Rock and Roll to Me", artist: "Billy Joel", chart: "Billboard Hot 100" },
+    9:  { title: "Magic", artist: "Olivia Newton-John", chart: "Billboard Hot 100" },
+    10: { title: "Upside Down", artist: "Diana Ross", chart: "Billboard Hot 100" },
+    11: { title: "Another One Bites the Dust", artist: "Queen", chart: "Billboard Hot 100" },
+    12: { title: "Woman in Love", artist: "Barbra Streisand", chart: "Billboard Hot 100" }
+  },
+  1981: {
+    1:  { title: "The Tide Is High", artist: "Blondie", chart: "Billboard Hot 100" },
+    2:  { title: "(Just Like) Starting Over", artist: "John Lennon", chart: "Billboard Hot 100" },
+    3:  { title: "I Love a Rainy Night", artist: "Eddie Rabbitt", chart: "Billboard Hot 100" },
+    4:  { title: "Rapture", artist: "Blondie", chart: "Billboard Hot 100" },
+    5:  { title: "Kiss on My List", artist: "Hall & Oates", chart: "Billboard Hot 100" },
+    6:  { title: "Bette Davis Eyes", artist: "Kim Carnes", chart: "Billboard Hot 100" },
+    7:  { title: "Bette Davis Eyes", artist: "Kim Carnes", chart: "Billboard Hot 100" },
+    8:  { title: "Jessie's Girl", artist: "Rick Springfield", chart: "Billboard Hot 100" },
+    9:  { title: "Endless Love", artist: "Diana Ross & Lionel Richie", chart: "Billboard Hot 100" },
+    10: { title: "Endless Love", artist: "Diana Ross & Lionel Richie", chart: "Billboard Hot 100" },
+    11: { title: "Arthur's Theme (Best That You Can Do)", artist: "Christopher Cross", chart: "Billboard Hot 100" },
+    12: { title: "Physical", artist: "Olivia Newton-John", chart: "Billboard Hot 100" }
+  },
+  1982: {
+    1:  { title: "Physical", artist: "Olivia Newton-John", chart: "Billboard Hot 100" },
+    2:  { title: "I Can't Go for That (No Can Do)", artist: "Hall & Oates", chart: "Billboard Hot 100" },
+    3:  { title: "I Love Rock 'n' Roll", artist: "Joan Jett & The Blackhearts", chart: "Billboard Hot 100" },
+    4:  { title: "I Love Rock 'n' Roll", artist: "Joan Jett & The Blackhearts", chart: "Billboard Hot 100" },
+    5:  { title: "Chariots of Fire", artist: "Vangelis", chart: "Billboard Hot 100" },
+    6:  { title: "Ebony and Ivory", artist: "Paul McCartney & Stevie Wonder", chart: "Billboard Hot 100" },
+    7:  { title: "Don't You Want Me", artist: "Human League", chart: "Billboard Hot 100" },
+    8:  { title: "Eye of the Tiger", artist: "Survivor", chart: "Billboard Hot 100" },
+    9:  { title: "Abracadabra", artist: "Steve Miller Band", chart: "Billboard Hot 100" },
+    10: { title: "Jack & Diane", artist: "John Mellencamp", chart: "Billboard Hot 100" },
+    11: { title: "Who Can It Be Now?", artist: "Men at Work", chart: "Billboard Hot 100" },
+    12: { title: "Up Where We Belong", artist: "Joe Cocker & Jennifer Warnes", chart: "Billboard Hot 100" }
+  },
+  1983: {
+    1:  { title: "Down Under", artist: "Men at Work", chart: "Billboard Hot 100" },
+    2:  { title: "Africa", artist: "Toto", chart: "Billboard Hot 100" },
+    3:  { title: "Billie Jean", artist: "Michael Jackson", chart: "Billboard Hot 100" },
+    4:  { title: "Beat It", artist: "Michael Jackson", chart: "Billboard Hot 100" },
+    5:  { title: "Let's Dance", artist: "David Bowie", chart: "Billboard Hot 100" },
+    6:  { title: "Flashdance (What a Feeling)", artist: "Irene Cara", chart: "Billboard Hot 100" },
+    7:  { title: "Every Breath You Take", artist: "The Police", chart: "Billboard Hot 100" },
+    8:  { title: "Every Breath You Take", artist: "The Police", chart: "Billboard Hot 100" },
+    9:  { title: "Sweet Dreams (Are Made of This)", artist: "Eurythmics", chart: "Billboard Hot 100" },
+    10: { title: "Total Eclipse of the Heart", artist: "Bonnie Tyler", chart: "Billboard Hot 100" },
+    11: { title: "Islands in the Stream", artist: "Kenny Rogers & Dolly Parton", chart: "Billboard Hot 100" },
+    12: { title: "Say Say Say", artist: "Paul McCartney & Michael Jackson", chart: "Billboard Hot 100" }
+  },
+  1984: {
+    1:  { title: "Say Say Say", artist: "Paul McCartney & Michael Jackson", chart: "Billboard Hot 100" },
+    2:  { title: "Karma Chameleon", artist: "Culture Club", chart: "Billboard Hot 100" },
+    3:  { title: "Jump", artist: "Van Halen", chart: "Billboard Hot 100" },
+    4:  { title: "Footloose", artist: "Kenny Loggins", chart: "Billboard Hot 100" },
+    5:  { title: "Against All Odds (Take a Look at Me Now)", artist: "Phil Collins", chart: "Billboard Hot 100" },
+    6:  { title: "Hello", artist: "Lionel Richie", chart: "Billboard Hot 100" },
+    7:  { title: "Wake Me Up Before You Go-Go", artist: "Wham!", chart: "Billboard Hot 100" },
+    8:  { title: "When Doves Cry", artist: "Prince", chart: "Billboard Hot 100" },
+    9:  { title: "Ghost Busters", artist: "Ray Parker Jr.", chart: "Billboard Hot 100" },
+    10: { title: "Missing You", artist: "John Waite", chart: "Billboard Hot 100" },
+    11: { title: "Caribbean Queen", artist: "Billy Ocean", chart: "Billboard Hot 100" },
+    12: { title: "I Feel for You", artist: "Chaka Khan", chart: "Billboard Hot 100" }
+  },
+  1985: {
+    1:  { title: "Like a Virgin", artist: "Madonna", chart: "Billboard Hot 100" },
+    2:  { title: "I Want to Know What Love Is", artist: "Foreigner", chart: "Billboard Hot 100" },
+    3:  { title: "Can't Fight This Feeling", artist: "REO Speedwagon", chart: "Billboard Hot 100" },
+    4:  { title: "One More Night", artist: "Phil Collins", chart: "Billboard Hot 100" },
+    5:  { title: "We Are the World", artist: "USA for Africa", chart: "Billboard Hot 100" },
+    6:  { title: "Don't You (Forget About Me)", artist: "Simple Minds", chart: "Billboard Hot 100" },
+    7:  { title: "Everybody Wants to Rule the World", artist: "Tears for Fears", chart: "Billboard Hot 100" },
+    8:  { title: "Sussudio", artist: "Phil Collins", chart: "Billboard Hot 100" },
+    9:  { title: "Shout", artist: "Tears for Fears", chart: "Billboard Hot 100" },
+    10: { title: "The Power of Love", artist: "Huey Lewis & The News", chart: "Billboard Hot 100" },
+    11: { title: "Money for Nothing", artist: "Dire Straits", chart: "Billboard Hot 100" },
+    12: { title: "Take On Me", artist: "a-ha", chart: "Billboard Hot 100" }
+  },
+  1986: {
+    1:  { title: "That's What Friends Are For", artist: "Dionne & Friends", chart: "Billboard Hot 100" },
+    2:  { title: "That's What Friends Are For", artist: "Dionne & Friends", chart: "Billboard Hot 100" },
+    3:  { title: "How Will I Know", artist: "Whitney Houston", chart: "Billboard Hot 100" },
+    4:  { title: "Rock Me Amadeus", artist: "Falco", chart: "Billboard Hot 100" },
+    5:  { title: "West End Girls", artist: "Pet Shop Boys", chart: "Billboard Hot 100" },
+    6:  { title: "Greatest Love of All", artist: "Whitney Houston", chart: "Billboard Hot 100" },
+    7:  { title: "On My Own", artist: "Patti LaBelle & Michael McDonald", chart: "Billboard Hot 100" },
+    8:  { title: "Sledgehammer", artist: "Peter Gabriel", chart: "Billboard Hot 100" },
+    9:  { title: "Papa Don't Preach", artist: "Madonna", chart: "Billboard Hot 100" },
+    10: { title: "Higher Love", artist: "Steve Winwood", chart: "Billboard Hot 100" },
+    11: { title: "Stuck with You", artist: "Huey Lewis & The News", chart: "Billboard Hot 100" },
+    12: { title: "True Colors", artist: "Cyndi Lauper", chart: "Billboard Hot 100" }
+  },
+  1987: {
+    1:  { title: "Walk Like an Egyptian", artist: "The Bangles", chart: "Billboard Hot 100" },
+    2:  { title: "Open Your Heart", artist: "Madonna", chart: "Billboard Hot 100" },
+    3:  { title: "Jacob's Ladder", artist: "Huey Lewis & The News", chart: "Billboard Hot 100" },
+    4:  { title: "Nothing's Gonna Stop Us Now", artist: "Starship", chart: "Billboard Hot 100" },
+    5:  { title: "I Knew You Were Waiting (For Me)", artist: "Aretha Franklin & George Michael", chart: "Billboard Hot 100" },
+    6:  { title: "With or Without You", artist: "U2", chart: "Billboard Hot 100" },
+    7:  { title: "I Wanna Dance with Somebody", artist: "Whitney Houston", chart: "Billboard Hot 100" },
+    8:  { title: "Alone", artist: "Heart", chart: "Billboard Hot 100" },
+    9:  { title: "La Bamba", artist: "Los Lobos", chart: "Billboard Hot 100" },
+    10: { title: "I Just Can't Stop Loving You", artist: "Michael Jackson", chart: "Billboard Hot 100" },
+    11: { title: "Didn't We Almost Have It All", artist: "Whitney Houston", chart: "Billboard Hot 100" },
+    12: { title: "Bad", artist: "Michael Jackson", chart: "Billboard Hot 100" }
+  },
+  1988: {
+    1:  { title: "So Emotional", artist: "Whitney Houston", chart: "Billboard Hot 100" },
+    2:  { title: "Could've Been", artist: "Tiffany", chart: "Billboard Hot 100" },
+    3:  { title: "Never Gonna Give You Up", artist: "Rick Astley", chart: "Billboard Hot 100" },
+    4:  { title: "Man in the Mirror", artist: "Michael Jackson", chart: "Billboard Hot 100" },
+    5:  { title: "Where Do Broken Hearts Go", artist: "Whitney Houston", chart: "Billboard Hot 100" },
+    6:  { title: "Anything for You", artist: "Gloria Estefan & Miami Sound Machine", chart: "Billboard Hot 100" },
+    7:  { title: "One More Try", artist: "George Michael", chart: "Billboard Hot 100" },
+    8:  { title: "Monkey", artist: "George Michael", chart: "Billboard Hot 100" },
+    9:  { title: "Roll with It", artist: "Steve Winwood", chart: "Billboard Hot 100" },
+    10: { title: "Don't Worry Be Happy", artist: "Bobby McFerrin", chart: "Billboard Hot 100" },
+    11: { title: "Love Bites", artist: "Def Leppard", chart: "Billboard Hot 100" },
+    12: { title: "Bad Medicine", artist: "Bon Jovi", chart: "Billboard Hot 100" }
+  },
+  1989: {
+    1:  { title: "Every Rose Has Its Thorn", artist: "Poison", chart: "Billboard Hot 100" },
+    2:  { title: "Straight Up", artist: "Paula Abdul", chart: "Billboard Hot 100" },
+    3:  { title: "Lost in Your Eyes", artist: "Debbie Gibson", chart: "Billboard Hot 100" },
+    4:  { title: "The Living Years", artist: "Mike + The Mechanics", chart: "Billboard Hot 100" },
+    5:  { title: "Like a Prayer", artist: "Madonna", chart: "Billboard Hot 100" },
+    6:  { title: "I'll Be There for You", artist: "Bon Jovi", chart: "Billboard Hot 100" },
+    7:  { title: "Wind Beneath My Wings", artist: "Bette Midler", chart: "Billboard Hot 100" },
+    8:  { title: "Batdance", artist: "Prince", chart: "Billboard Hot 100" },
+    9:  { title: "Right Here Waiting", artist: "Richard Marx", chart: "Billboard Hot 100" },
+    10: { title: "Cold Hearted", artist: "Paula Abdul", chart: "Billboard Hot 100" },
+    11: { title: "Miss You Much", artist: "Janet Jackson", chart: "Billboard Hot 100" },
+    12: { title: "Blame It on the Rain", artist: "Milli Vanilli", chart: "Billboard Hot 100" }
+  },
+  1990: {
+    1:  { title: "Another Day in Paradise", artist: "Phil Collins", chart: "Billboard Hot 100" },
+    2:  { title: "How Am I Supposed to Live Without You", artist: "Michael Bolton", chart: "Billboard Hot 100" },
+    3:  { title: "Escapade", artist: "Janet Jackson", chart: "Billboard Hot 100" },
+    4:  { title: "Black Velvet", artist: "Alannah Myles", chart: "Billboard Hot 100" },
+    5:  { title: "Nothing Compares 2 U", artist: "Sinéad O'Connor", chart: "Billboard Hot 100" },
+    6:  { title: "Hold On", artist: "Wilson Phillips", chart: "Billboard Hot 100" },
+    7:  { title: "Hold On", artist: "Wilson Phillips", chart: "Billboard Hot 100" },
+    8:  { title: "She Ain't Worth It", artist: "Glenn Medeiros ft. Bobby Brown", chart: "Billboard Hot 100" },
+    9:  { title: "Vision of Love", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    10: { title: "Release Me", artist: "Wilson Phillips", chart: "Billboard Hot 100" },
+    11: { title: "Ice Ice Baby", artist: "Vanilla Ice", chart: "Billboard Hot 100" },
+    12: { title: "I'm Your Baby Tonight", artist: "Whitney Houston", chart: "Billboard Hot 100" }
+  },
+  1991: {
+    1:  { title: "Justify My Love", artist: "Madonna", chart: "Billboard Hot 100" },
+    2:  { title: "The First Time", artist: "Surface", chart: "Billboard Hot 100" },
+    3:  { title: "One More Try", artist: "Timmy T.", chart: "Billboard Hot 100" },
+    4:  { title: "I've Been Thinking About You", artist: "Londonbeat", chart: "Billboard Hot 100" },
+    5:  { title: "Baby Baby", artist: "Amy Grant", chart: "Billboard Hot 100" },
+    6:  { title: "I Don't Wanna Cry", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    7:  { title: "Rush Rush", artist: "Paula Abdul", chart: "Billboard Hot 100" },
+    8:  { title: "Unbelievable", artist: "EMF", chart: "Billboard Hot 100" },
+    9:  { title: "I Wanna Sex You Up", artist: "Color Me Badd", chart: "Billboard Hot 100" },
+    10: { title: "I Adore Mi Amor", artist: "Color Me Badd", chart: "Billboard Hot 100" },
+    11: { title: "Emotions", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    12: { title: "Cream", artist: "Prince & The New Power Generation", chart: "Billboard Hot 100" }
+  },
+  1992: {
+    1:  { title: "Black or White", artist: "Michael Jackson", chart: "Billboard Hot 100" },
+    2:  { title: "All 4 Love", artist: "Color Me Badd", chart: "Billboard Hot 100" },
+    3:  { title: "To Be with You", artist: "Mr. Big", chart: "Billboard Hot 100" },
+    4:  { title: "Save the Best for Last", artist: "Vanessa Williams", chart: "Billboard Hot 100" },
+    5:  { title: "Jump", artist: "Kris Kross", chart: "Billboard Hot 100" },
+    6:  { title: "I'll Be There", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    7:  { title: "Baby Got Back", artist: "Sir Mix-a-Lot", chart: "Billboard Hot 100" },
+    8:  { title: "Baby Got Back", artist: "Sir Mix-a-Lot", chart: "Billboard Hot 100" },
+    9:  { title: "End of the Road", artist: "Boyz II Men", chart: "Billboard Hot 100" },
+    10: { title: "End of the Road", artist: "Boyz II Men", chart: "Billboard Hot 100" },
+    11: { title: "End of the Road", artist: "Boyz II Men", chart: "Billboard Hot 100" },
+    12: { title: "I Will Always Love You", artist: "Whitney Houston", chart: "Billboard Hot 100" }
+  },
+  1993: {
+    1:  { title: "I Will Always Love You", artist: "Whitney Houston", chart: "Billboard Hot 100" },
+    2:  { title: "I Will Always Love You", artist: "Whitney Houston", chart: "Billboard Hot 100" },
+    3:  { title: "Ordinary World", artist: "Duran Duran", chart: "Billboard Hot 100" },
+    4:  { title: "Informer", artist: "Snow", chart: "Billboard Hot 100" },
+    5:  { title: "Freak Me", artist: "Silk", chart: "Billboard Hot 100" },
+    6:  { title: "That's the Way Love Goes", artist: "Janet Jackson", chart: "Billboard Hot 100" },
+    7:  { title: "That's the Way Love Goes", artist: "Janet Jackson", chart: "Billboard Hot 100" },
+    8:  { title: "Weak", artist: "SWV", chart: "Billboard Hot 100" },
+    9:  { title: "Can't Help Falling in Love", artist: "UB40", chart: "Billboard Hot 100" },
+    10: { title: "Dreamlover", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    11: { title: "All That She Wants", artist: "Ace of Base", chart: "Billboard Hot 100" },
+    12: { title: "Again", artist: "Janet Jackson", chart: "Billboard Hot 100" }
+  },
+  1994: {
+    1:  { title: "Hero", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    2:  { title: "The Sign", artist: "Ace of Base", chart: "Billboard Hot 100" },
+    3:  { title: "The Sign", artist: "Ace of Base", chart: "Billboard Hot 100" },
+    4:  { title: "Bump n' Grind", artist: "R. Kelly", chart: "Billboard Hot 100" },
+    5:  { title: "The Most Beautiful Girl in the World", artist: "Prince", chart: "Billboard Hot 100" },
+    6:  { title: "I Swear", artist: "All-4-One", chart: "Billboard Hot 100" },
+    7:  { title: "I Swear", artist: "All-4-One", chart: "Billboard Hot 100" },
+    8:  { title: "Stay (I Missed You)", artist: "Lisa Loeb & Nine Stories", chart: "Billboard Hot 100" },
+    9:  { title: "I'll Make Love to You", artist: "Boyz II Men", chart: "Billboard Hot 100" },
+    10: { title: "I'll Make Love to You", artist: "Boyz II Men", chart: "Billboard Hot 100" },
+    11: { title: "Always", artist: "Bon Jovi", chart: "Billboard Hot 100" },
+    12: { title: "On Bended Knee", artist: "Boyz II Men", chart: "Billboard Hot 100" }
+  },
+  1995: {
+    1:  { title: "On Bended Knee", artist: "Boyz II Men", chart: "Billboard Hot 100" },
+    2:  { title: "Creep", artist: "TLC", chart: "Billboard Hot 100" },
+    3:  { title: "Take a Bow", artist: "Madonna", chart: "Billboard Hot 100" },
+    4:  { title: "Take a Bow", artist: "Madonna", chart: "Billboard Hot 100" },
+    5:  { title: "This Is How We Do It", artist: "Montell Jordan", chart: "Billboard Hot 100" },
+    6:  { title: "Have You Ever Really Loved a Woman?", artist: "Bryan Adams", chart: "Billboard Hot 100" },
+    7:  { title: "Waterfalls", artist: "TLC", chart: "Billboard Hot 100" },
+    8:  { title: "Gangsta's Paradise", artist: "Coolio ft. L.V.", chart: "Billboard Hot 100" },
+    9:  { title: "Gangsta's Paradise", artist: "Coolio ft. L.V.", chart: "Billboard Hot 100" },
+    10: { title: "Fantasy", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    11: { title: "Fantasy", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    12: { title: "One Sweet Day", artist: "Mariah Carey & Boyz II Men", chart: "Billboard Hot 100" }
+  },
+  1996: {
+    1:  { title: "One Sweet Day", artist: "Mariah Carey & Boyz II Men", chart: "Billboard Hot 100" },
+    2:  { title: "One Sweet Day", artist: "Mariah Carey & Boyz II Men", chart: "Billboard Hot 100" },
+    3:  { title: "One Sweet Day", artist: "Mariah Carey & Boyz II Men", chart: "Billboard Hot 100" },
+    4:  { title: "Because You Loved Me", artist: "Celine Dion", chart: "Billboard Hot 100" },
+    5:  { title: "Because You Loved Me", artist: "Celine Dion", chart: "Billboard Hot 100" },
+    6:  { title: "Tha Crossroads", artist: "Bone Thugs-n-Harmony", chart: "Billboard Hot 100" },
+    7:  { title: "You're Makin' Me High / Let It Flow", artist: "Toni Braxton", chart: "Billboard Hot 100" },
+    8:  { title: "How Do U Want It / California Love", artist: "2Pac", chart: "Billboard Hot 100" },
+    9:  { title: "Macarena (Bayside Boys Mix)", artist: "Los Del Rio", chart: "Billboard Hot 100" },
+    10: { title: "Macarena (Bayside Boys Mix)", artist: "Los Del Rio", chart: "Billboard Hot 100" },
+    11: { title: "Un-Break My Heart", artist: "Toni Braxton", chart: "Billboard Hot 100" },
+    12: { title: "I Believe I Can Fly", artist: "R. Kelly", chart: "Billboard Hot 100" }
+  },
+  1997: {
+    1:  { title: "Un-Break My Heart", artist: "Toni Braxton", chart: "Billboard Hot 100" },
+    2:  { title: "Un-Break My Heart", artist: "Toni Braxton", chart: "Billboard Hot 100" },
+    3:  { title: "Can't Nobody Hold Me Down", artist: "Puff Daddy ft. Mase", chart: "Billboard Hot 100" },
+    4:  { title: "Can't Nobody Hold Me Down", artist: "Puff Daddy ft. Mase", chart: "Billboard Hot 100" },
+    5:  { title: "Hypnotize", artist: "The Notorious B.I.G.", chart: "Billboard Hot 100" },
+    6:  { title: "MMMBop", artist: "Hanson", chart: "Billboard Hot 100" },
+    7:  { title: "I'll Be Missing You", artist: "Puff Daddy & Faith Evans", chart: "Billboard Hot 100" },
+    8:  { title: "I'll Be Missing You", artist: "Puff Daddy & Faith Evans", chart: "Billboard Hot 100" },
+    9:  { title: "Mo Money Mo Problems", artist: "The Notorious B.I.G.", chart: "Billboard Hot 100" },
+    10: { title: "Honey", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    11: { title: "Candle in the Wind 1997", artist: "Elton John", chart: "Billboard Hot 100" },
+    12: { title: "Candle in the Wind 1997", artist: "Elton John", chart: "Billboard Hot 100" }
+  },
+  1998: {
+    1:  { title: "Truly Madly Deeply", artist: "Savage Garden", chart: "Billboard Hot 100" },
+    2:  { title: "Truly Madly Deeply", artist: "Savage Garden", chart: "Billboard Hot 100" },
+    3:  { title: "Nice & Slow", artist: "Usher", chart: "Billboard Hot 100" },
+    4:  { title: "Let's Ride", artist: "Montell Jordan", chart: "Billboard Hot 100" },
+    5:  { title: "Too Close", artist: "Next", chart: "Billboard Hot 100" },
+    6:  { title: "My Heart Will Go On", artist: "Celine Dion", chart: "Billboard Hot 100" },
+    7:  { title: "The Boy Is Mine", artist: "Brandy & Monica", chart: "Billboard Hot 100" },
+    8:  { title: "The Boy Is Mine", artist: "Brandy & Monica", chart: "Billboard Hot 100" },
+    9:  { title: "I Don't Want to Miss a Thing", artist: "Aerosmith", chart: "Billboard Hot 100" },
+    10: { title: "I Don't Want to Miss a Thing", artist: "Aerosmith", chart: "Billboard Hot 100" },
+    11: { title: "One Week", artist: "Barenaked Ladies", chart: "Billboard Hot 100" },
+    12: { title: "Lately", artist: "Divine", chart: "Billboard Hot 100" }
+  },
+  1999: {
+    1:  { title: "Have You Ever?", artist: "Brandy", chart: "Billboard Hot 100" },
+    2:  { title: "...Baby One More Time", artist: "Britney Spears", chart: "Billboard Hot 100" },
+    3:  { title: "...Baby One More Time", artist: "Britney Spears", chart: "Billboard Hot 100" },
+    4:  { title: "No Scrubs", artist: "TLC", chart: "Billboard Hot 100" },
+    5:  { title: "Livin' La Vida Loca", artist: "Ricky Martin", chart: "Billboard Hot 100" },
+    6:  { title: "Livin' La Vida Loca", artist: "Ricky Martin", chart: "Billboard Hot 100" },
+    7:  { title: "If You Had My Love", artist: "Jennifer Lopez", chart: "Billboard Hot 100" },
+    8:  { title: "Genie in a Bottle", artist: "Christina Aguilera", chart: "Billboard Hot 100" },
+    9:  { title: "Mambo No. 5", artist: "Lou Bega", chart: "Billboard Hot 100" },
+    10: { title: "Unpretty", artist: "TLC", chart: "Billboard Hot 100" },
+    11: { title: "Smooth", artist: "Santana ft. Rob Thomas", chart: "Billboard Hot 100" },
+    12: { title: "Smooth", artist: "Santana ft. Rob Thomas", chart: "Billboard Hot 100" }
+  },
+  2000: {
+    1:  { title: "Smooth", artist: "Santana ft. Rob Thomas", chart: "Billboard Hot 100" },
+    2:  { title: "Smooth", artist: "Santana ft. Rob Thomas", chart: "Billboard Hot 100" },
+    3:  { title: "Amazed", artist: "Lonestar", chart: "Billboard Hot 100" },
+    4:  { title: "Say My Name", artist: "Destiny's Child", chart: "Billboard Hot 100" },
+    5:  { title: "Maria Maria", artist: "Santana ft. The Product G&B", chart: "Billboard Hot 100" },
+    6:  { title: "Maria Maria", artist: "Santana ft. The Product G&B", chart: "Billboard Hot 100" },
+    7:  { title: "Bent", artist: "Matchbox Twenty", chart: "Billboard Hot 100" },
+    8:  { title: "Breathe", artist: "Faith Hill", chart: "Billboard Hot 100" },
+    9:  { title: "Everything You Want", artist: "Vertical Horizon", chart: "Billboard Hot 100" },
+    10: { title: "Doesn't Really Matter", artist: "Janet Jackson", chart: "Billboard Hot 100" },
+    11: { title: "Come On Over Baby", artist: "Christina Aguilera", chart: "Billboard Hot 100" },
+    12: { title: "Independent Women Part I", artist: "Destiny's Child", chart: "Billboard Hot 100" }
+  },
+  2001: {
+    1:  { title: "Independent Women Part I", artist: "Destiny's Child", chart: "Billboard Hot 100" },
+    2:  { title: "Independent Women Part I", artist: "Destiny's Child", chart: "Billboard Hot 100" },
+    3:  { title: "Stutter", artist: "Joe ft. Mystikal", chart: "Billboard Hot 100" },
+    4:  { title: "Butterfly", artist: "Crazy Town", chart: "Billboard Hot 100" },
+    5:  { title: "All for You", artist: "Janet Jackson", chart: "Billboard Hot 100" },
+    6:  { title: "Lady Marmalade", artist: "Christina Aguilera, Lil' Kim, Mýa & Pink", chart: "Billboard Hot 100" },
+    7:  { title: "U Remind Me", artist: "Usher", chart: "Billboard Hot 100" },
+    8:  { title: "Hanging by a Moment", artist: "Lifehouse", chart: "Billboard Hot 100" },
+    9:  { title: "Fallin'", artist: "Alicia Keys", chart: "Billboard Hot 100" },
+    10: { title: "I'm Real", artist: "Jennifer Lopez ft. Ja Rule", chart: "Billboard Hot 100" },
+    11: { title: "Family Affair", artist: "Mary J. Blige", chart: "Billboard Hot 100" },
+    12: { title: "Hero", artist: "Enrique Iglesias", chart: "Billboard Hot 100" }
+  },
+  2002: {
+    1:  { title: "How You Remind Me", artist: "Nickelback", chart: "Billboard Hot 100" },
+    2:  { title: "Ain't It Funny", artist: "Jennifer Lopez ft. Ja Rule", chart: "Billboard Hot 100" },
+    3:  { title: "Ain't It Funny", artist: "Jennifer Lopez ft. Ja Rule", chart: "Billboard Hot 100" },
+    4:  { title: "Foolish", artist: "Ashanti", chart: "Billboard Hot 100" },
+    5:  { title: "Foolish", artist: "Ashanti", chart: "Billboard Hot 100" },
+    6:  { title: "Hot in Herre", artist: "Nelly", chart: "Billboard Hot 100" },
+    7:  { title: "Hot in Herre", artist: "Nelly", chart: "Billboard Hot 100" },
+    8:  { title: "Without Me", artist: "Eminem", chart: "Billboard Hot 100" },
+    9:  { title: "Complicated", artist: "Avril Lavigne", chart: "Billboard Hot 100" },
+    10: { title: "Dilemma", artist: "Nelly ft. Kelly Rowland", chart: "Billboard Hot 100" },
+    11: { title: "Dilemma", artist: "Nelly ft. Kelly Rowland", chart: "Billboard Hot 100" },
+    12: { title: "Lose Yourself", artist: "Eminem", chart: "Billboard Hot 100" }
+  },
+  2003: {
+    1:  { title: "Lose Yourself", artist: "Eminem", chart: "Billboard Hot 100" },
+    2:  { title: "In da Club", artist: "50 Cent", chart: "Billboard Hot 100" },
+    3:  { title: "In da Club", artist: "50 Cent", chart: "Billboard Hot 100" },
+    4:  { title: "Beautiful", artist: "Christina Aguilera", chart: "Billboard Hot 100" },
+    5:  { title: "Get Busy", artist: "Sean Paul", chart: "Billboard Hot 100" },
+    6:  { title: "21 Questions", artist: "50 Cent ft. Nate Dogg", chart: "Billboard Hot 100" },
+    7:  { title: "Crazy in Love", artist: "Beyoncé ft. Jay-Z", chart: "Billboard Hot 100" },
+    8:  { title: "Crazy in Love", artist: "Beyoncé ft. Jay-Z", chart: "Billboard Hot 100" },
+    9:  { title: "Shake Ya Tailfeather", artist: "Nelly, P. Diddy & Murphy Lee", chart: "Billboard Hot 100" },
+    10: { title: "Baby Boy", artist: "Beyoncé ft. Sean Paul", chart: "Billboard Hot 100" },
+    11: { title: "The Way You Move", artist: "OutKast ft. Sleepy Brown", chart: "Billboard Hot 100" },
+    12: { title: "Hey Ya!", artist: "OutKast", chart: "Billboard Hot 100" }
+  },
+  2004: {
+    1:  { title: "Hey Ya!", artist: "OutKast", chart: "Billboard Hot 100" },
+    2:  { title: "The Way You Move", artist: "OutKast ft. Sleepy Brown", chart: "Billboard Hot 100" },
+    3:  { title: "Yeah!", artist: "Usher ft. Lil Jon & Ludacris", chart: "Billboard Hot 100" },
+    4:  { title: "Yeah!", artist: "Usher ft. Lil Jon & Ludacris", chart: "Billboard Hot 100" },
+    5:  { title: "Yeah!", artist: "Usher ft. Lil Jon & Ludacris", chart: "Billboard Hot 100" },
+    6:  { title: "Burn", artist: "Usher", chart: "Billboard Hot 100" },
+    7:  { title: "Burn", artist: "Usher", chart: "Billboard Hot 100" },
+    8:  { title: "Confessions Part II", artist: "Usher", chart: "Billboard Hot 100" },
+    9:  { title: "Slow Motion", artist: "Juvenile", chart: "Billboard Hot 100" },
+    10: { title: "Goodies", artist: "Ciara ft. Petey Pablo", chart: "Billboard Hot 100" },
+    11: { title: "Goodies", artist: "Ciara ft. Petey Pablo", chart: "Billboard Hot 100" },
+    12: { title: "Drop It Like It's Hot", artist: "Snoop Dogg ft. Pharrell", chart: "Billboard Hot 100" }
+  },
+  2005: {
+    1:  { title: "Drop It Like It's Hot", artist: "Snoop Dogg ft. Pharrell", chart: "Billboard Hot 100" },
+    2:  { title: "Let Me Love You", artist: "Mario", chart: "Billboard Hot 100" },
+    3:  { title: "Let Me Love You", artist: "Mario", chart: "Billboard Hot 100" },
+    4:  { title: "Candy Shop", artist: "50 Cent ft. Olivia", chart: "Billboard Hot 100" },
+    5:  { title: "Candy Shop", artist: "50 Cent ft. Olivia", chart: "Billboard Hot 100" },
+    6:  { title: "We Belong Together", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    7:  { title: "We Belong Together", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    8:  { title: "We Belong Together", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    9:  { title: "Gold Digger", artist: "Kanye West ft. Jamie Foxx", chart: "Billboard Hot 100" },
+    10: { title: "Gold Digger", artist: "Kanye West ft. Jamie Foxx", chart: "Billboard Hot 100" },
+    11: { title: "Gold Digger", artist: "Kanye West ft. Jamie Foxx", chart: "Billboard Hot 100" },
+    12: { title: "We Be Burnin'", artist: "Sean Paul", chart: "Billboard Hot 100" }
+  },
+  2006: {
+    1:  { title: "Run It!", artist: "Chris Brown", chart: "Billboard Hot 100" },
+    2:  { title: "Check on It", artist: "Beyoncé ft. Slim Thug", chart: "Billboard Hot 100" },
+    3:  { title: "So Sick", artist: "Ne-Yo", chart: "Billboard Hot 100" },
+    4:  { title: "Temperature", artist: "Sean Paul", chart: "Billboard Hot 100" },
+    5:  { title: "Be Without You", artist: "Mary J. Blige", chart: "Billboard Hot 100" },
+    6:  { title: "Promiscuous", artist: "Nelly Furtado ft. Timbaland", chart: "Billboard Hot 100" },
+    7:  { title: "Crazy", artist: "Gnarls Barkley", chart: "Billboard Hot 100" },
+    8:  { title: "Crazy", artist: "Gnarls Barkley", chart: "Billboard Hot 100" },
+    9:  { title: "SexyBack", artist: "Justin Timberlake ft. Timbaland", chart: "Billboard Hot 100" },
+    10: { title: "Fergalicious", artist: "Fergie ft. will.i.am", chart: "Billboard Hot 100" },
+    11: { title: "You're Beautiful", artist: "James Blunt", chart: "Billboard Hot 100" },
+    12: { title: "Give It to Me", artist: "Timbaland ft. Nelly Furtado & Justin Timberlake", chart: "Billboard Hot 100" }
+  },
+  2007: {
+    1:  { title: "Irreplaceable", artist: "Beyoncé", chart: "Billboard Hot 100" },
+    2:  { title: "Because of You", artist: "Ne-Yo", chart: "Billboard Hot 100" },
+    3:  { title: "The Sweet Escape", artist: "Gwen Stefani ft. Akon", chart: "Billboard Hot 100" },
+    4:  { title: "This Is Why I'm Hot", artist: "MIMS", chart: "Billboard Hot 100" },
+    5:  { title: "Glamorous", artist: "Fergie ft. Ludacris", chart: "Billboard Hot 100" },
+    6:  { title: "Umbrella", artist: "Rihanna ft. Jay-Z", chart: "Billboard Hot 100" },
+    7:  { title: "Umbrella", artist: "Rihanna ft. Jay-Z", chart: "Billboard Hot 100" },
+    8:  { title: "The Way I Are", artist: "Timbaland ft. Keri Hilson", chart: "Billboard Hot 100" },
+    9:  { title: "Big Girls Don't Cry", artist: "Fergie", chart: "Billboard Hot 100" },
+    10: { title: "Stronger (What Doesn't Kill You)", artist: "Kanye West", chart: "Billboard Hot 100" },
+    11: { title: "Crank That (Soulja Boy)", artist: "Soulja Boy Tell 'Em", chart: "Billboard Hot 100" },
+    12: { title: "No One", artist: "Alicia Keys", chart: "Billboard Hot 100" }
+  },
+  2008: {
+    1:  { title: "No One", artist: "Alicia Keys", chart: "Billboard Hot 100" },
+    2:  { title: "Low", artist: "Flo Rida ft. T-Pain", chart: "Billboard Hot 100" },
+    3:  { title: "Low", artist: "Flo Rida ft. T-Pain", chart: "Billboard Hot 100" },
+    4:  { title: "Love Song", artist: "Sara Bareilles", chart: "Billboard Hot 100" },
+    5:  { title: "Bleeding Love", artist: "Leona Lewis", chart: "Billboard Hot 100" },
+    6:  { title: "I Kissed a Girl", artist: "Katy Perry", chart: "Billboard Hot 100" },
+    7:  { title: "I Kissed a Girl", artist: "Katy Perry", chart: "Billboard Hot 100" },
+    8:  { title: "I Kissed a Girl", artist: "Katy Perry", chart: "Billboard Hot 100" },
+    9:  { title: "Disturbia", artist: "Rihanna", chart: "Billboard Hot 100" },
+    10: { title: "Live Your Life", artist: "T.I. ft. Rihanna", chart: "Billboard Hot 100" },
+    11: { title: "Live Your Life", artist: "T.I. ft. Rihanna", chart: "Billboard Hot 100" },
+    12: { title: "Whatever You Like", artist: "T.I.", chart: "Billboard Hot 100" }
+  },
+  2009: {
+    1:  { title: "Single Ladies (Put a Ring on It)", artist: "Beyoncé", chart: "Billboard Hot 100" },
+    2:  { title: "Just Dance", artist: "Lady Gaga ft. Colby O'Donis", chart: "Billboard Hot 100" },
+    3:  { title: "Right Round", artist: "Flo Rida ft. Kesha", chart: "Billboard Hot 100" },
+    4:  { title: "Right Round", artist: "Flo Rida ft. Kesha", chart: "Billboard Hot 100" },
+    5:  { title: "Poker Face", artist: "Lady Gaga", chart: "Billboard Hot 100" },
+    6:  { title: "Boom Boom Pow", artist: "Black Eyed Peas", chart: "Billboard Hot 100" },
+    7:  { title: "I Gotta Feeling", artist: "Black Eyed Peas", chart: "Billboard Hot 100" },
+    8:  { title: "I Gotta Feeling", artist: "Black Eyed Peas", chart: "Billboard Hot 100" },
+    9:  { title: "I Gotta Feeling", artist: "Black Eyed Peas", chart: "Billboard Hot 100" },
+    10: { title: "I Gotta Feeling", artist: "Black Eyed Peas", chart: "Billboard Hot 100" },
+    11: { title: "Empire State of Mind", artist: "Jay-Z ft. Alicia Keys", chart: "Billboard Hot 100" },
+    12: { title: "Empire State of Mind", artist: "Jay-Z ft. Alicia Keys", chart: "Billboard Hot 100" }
+  },
+  2010: {
+    1:  { title: "Tik Tok", artist: "Kesha", chart: "Billboard Hot 100" },
+    2:  { title: "Tik Tok", artist: "Kesha", chart: "Billboard Hot 100" },
+    3:  { title: "Need You Now", artist: "Lady Antebellum", chart: "Billboard Hot 100" },
+    4:  { title: "Rude Boy", artist: "Rihanna", chart: "Billboard Hot 100" },
+    5:  { title: "Rude Boy", artist: "Rihanna", chart: "Billboard Hot 100" },
+    6:  { title: "OMG", artist: "Usher ft. will.i.am", chart: "Billboard Hot 100" },
+    7:  { title: "OMG", artist: "Usher ft. will.i.am", chart: "Billboard Hot 100" },
+    8:  { title: "California Gurls", artist: "Katy Perry ft. Snoop Dogg", chart: "Billboard Hot 100" },
+    9:  { title: "Love the Way You Lie", artist: "Eminem ft. Rihanna", chart: "Billboard Hot 100" },
+    10: { title: "Just the Way You Are", artist: "Bruno Mars", chart: "Billboard Hot 100" },
+    11: { title: "Just the Way You Are", artist: "Bruno Mars", chart: "Billboard Hot 100" },
+    12: { title: "Firework", artist: "Katy Perry", chart: "Billboard Hot 100" }
+  },
+  2011: {
+    1:  { title: "Firework", artist: "Katy Perry", chart: "Billboard Hot 100" },
+    2:  { title: "Grenade", artist: "Bruno Mars", chart: "Billboard Hot 100" },
+    3:  { title: "Born This Way", artist: "Lady Gaga", chart: "Billboard Hot 100" },
+    4:  { title: "E.T.", artist: "Katy Perry ft. Kanye West", chart: "Billboard Hot 100" },
+    5:  { title: "S&M", artist: "Rihanna", chart: "Billboard Hot 100" },
+    6:  { title: "Rolling in the Deep", artist: "Adele", chart: "Billboard Hot 100" },
+    7:  { title: "Rolling in the Deep", artist: "Adele", chart: "Billboard Hot 100" },
+    8:  { title: "Party Rock Anthem", artist: "LMFAO ft. Lauren Bennett & GoonRock", chart: "Billboard Hot 100" },
+    9:  { title: "Moves Like Jagger", artist: "Maroon 5 ft. Christina Aguilera", chart: "Billboard Hot 100" },
+    10: { title: "Moves Like Jagger", artist: "Maroon 5 ft. Christina Aguilera", chart: "Billboard Hot 100" },
+    11: { title: "We Found Love", artist: "Rihanna ft. Calvin Harris", chart: "Billboard Hot 100" },
+    12: { title: "We Found Love", artist: "Rihanna ft. Calvin Harris", chart: "Billboard Hot 100" }
+  },
+  2012: {
+    1:  { title: "We Found Love", artist: "Rihanna ft. Calvin Harris", chart: "Billboard Hot 100" },
+    2:  { title: "We Are Young", artist: "fun. ft. Janelle Monáe", chart: "Billboard Hot 100" },
+    3:  { title: "Somebody That I Used to Know", artist: "Gotye ft. Kimbra", chart: "Billboard Hot 100" },
+    4:  { title: "Somebody That I Used to Know", artist: "Gotye ft. Kimbra", chart: "Billboard Hot 100" },
+    5:  { title: "Somebody That I Used to Know", artist: "Gotye ft. Kimbra", chart: "Billboard Hot 100" },
+    6:  { title: "Call Me Maybe", artist: "Carly Rae Jepsen", chart: "Billboard Hot 100" },
+    7:  { title: "Call Me Maybe", artist: "Carly Rae Jepsen", chart: "Billboard Hot 100" },
+    8:  { title: "Lights", artist: "Ellie Goulding", chart: "Billboard Hot 100" },
+    9:  { title: "We Are Never Ever Getting Back Together", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    10: { title: "One More Night", artist: "Maroon 5", chart: "Billboard Hot 100" },
+    11: { title: "One More Night", artist: "Maroon 5", chart: "Billboard Hot 100" },
+    12: { title: "Diamonds", artist: "Rihanna", chart: "Billboard Hot 100" }
+  },
+  2013: {
+    1:  { title: "Diamonds", artist: "Rihanna", chart: "Billboard Hot 100" },
+    2:  { title: "Thrift Shop", artist: "Macklemore & Ryan Lewis ft. Wanz", chart: "Billboard Hot 100" },
+    3:  { title: "Thrift Shop", artist: "Macklemore & Ryan Lewis ft. Wanz", chart: "Billboard Hot 100" },
+    4:  { title: "Harlem Shake", artist: "Baauer", chart: "Billboard Hot 100" },
+    5:  { title: "Can't Hold Us", artist: "Macklemore & Ryan Lewis ft. Ray Dalton", chart: "Billboard Hot 100" },
+    6:  { title: "Can't Hold Us", artist: "Macklemore & Ryan Lewis ft. Ray Dalton", chart: "Billboard Hot 100" },
+    7:  { title: "Blurred Lines", artist: "Robin Thicke ft. T.I. & Pharrell", chart: "Billboard Hot 100" },
+    8:  { title: "Blurred Lines", artist: "Robin Thicke ft. T.I. & Pharrell", chart: "Billboard Hot 100" },
+    9:  { title: "Roar", artist: "Katy Perry", chart: "Billboard Hot 100" },
+    10: { title: "Wrecking Ball", artist: "Miley Cyrus", chart: "Billboard Hot 100" },
+    11: { title: "Royals", artist: "Lorde", chart: "Billboard Hot 100" },
+    12: { title: "The Monster", artist: "Eminem ft. Rihanna", chart: "Billboard Hot 100" }
+  },
+  2014: {
+    1:  { title: "The Monster", artist: "Eminem ft. Rihanna", chart: "Billboard Hot 100" },
+    2:  { title: "Happy", artist: "Pharrell Williams", chart: "Billboard Hot 100" },
+    3:  { title: "Happy", artist: "Pharrell Williams", chart: "Billboard Hot 100" },
+    4:  { title: "Happy", artist: "Pharrell Williams", chart: "Billboard Hot 100" },
+    5:  { title: "Happy", artist: "Pharrell Williams", chart: "Billboard Hot 100" },
+    6:  { title: "Fancy", artist: "Iggy Azalea ft. Charli XCX", chart: "Billboard Hot 100" },
+    7:  { title: "Fancy", artist: "Iggy Azalea ft. Charli XCX", chart: "Billboard Hot 100" },
+    8:  { title: "Rude", artist: "Magic!", chart: "Billboard Hot 100" },
+    9:  { title: "Stay with Me", artist: "Sam Smith", chart: "Billboard Hot 100" },
+    10: { title: "All About That Bass", artist: "Meghan Trainor", chart: "Billboard Hot 100" },
+    11: { title: "All About That Bass", artist: "Meghan Trainor", chart: "Billboard Hot 100" },
+    12: { title: "Blank Space", artist: "Taylor Swift", chart: "Billboard Hot 100" }
+  },
+  2015: {
+    1:  { title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars", chart: "Billboard Hot 100" },
+    2:  { title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars", chart: "Billboard Hot 100" },
+    3:  { title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars", chart: "Billboard Hot 100" },
+    4:  { title: "See You Again", artist: "Wiz Khalifa ft. Charlie Puth", chart: "Billboard Hot 100" },
+    5:  { title: "See You Again", artist: "Wiz Khalifa ft. Charlie Puth", chart: "Billboard Hot 100" },
+    6:  { title: "See You Again", artist: "Wiz Khalifa ft. Charlie Puth", chart: "Billboard Hot 100" },
+    7:  { title: "Want to Want Me", artist: "Jason Derulo", chart: "Billboard Hot 100" },
+    8:  { title: "Cheerleader", artist: "OMI", chart: "Billboard Hot 100" },
+    9:  { title: "Can't Feel My Face", artist: "The Weeknd", chart: "Billboard Hot 100" },
+    10: { title: "What Do You Mean?", artist: "Justin Bieber", chart: "Billboard Hot 100" },
+    11: { title: "The Hills", artist: "The Weeknd", chart: "Billboard Hot 100" },
+    12: { title: "Hello", artist: "Adele", chart: "Billboard Hot 100" }
+  },
+  2016: {
+    1:  { title: "Hello", artist: "Adele", chart: "Billboard Hot 100" },
+    2:  { title: "Work from Home", artist: "Fifth Harmony ft. Ty Dolla $ign", chart: "Billboard Hot 100" },
+    3:  { title: "Work from Home", artist: "Fifth Harmony ft. Ty Dolla $ign", chart: "Billboard Hot 100" },
+    4:  { title: "Work from Home", artist: "Fifth Harmony ft. Ty Dolla $ign", chart: "Billboard Hot 100" },
+    5:  { title: "Panda", artist: "Desiigner", chart: "Billboard Hot 100" },
+    6:  { title: "One Dance", artist: "Drake ft. WizKid & Kyla", chart: "Billboard Hot 100" },
+    7:  { title: "One Dance", artist: "Drake ft. WizKid & Kyla", chart: "Billboard Hot 100" },
+    8:  { title: "Cheap Thrills", artist: "Sia ft. Sean Paul", chart: "Billboard Hot 100" },
+    9:  { title: "Cheap Thrills", artist: "Sia ft. Sean Paul", chart: "Billboard Hot 100" },
+    10: { title: "Closer", artist: "The Chainsmokers ft. Halsey", chart: "Billboard Hot 100" },
+    11: { title: "Closer", artist: "The Chainsmokers ft. Halsey", chart: "Billboard Hot 100" },
+    12: { title: "Closer", artist: "The Chainsmokers ft. Halsey", chart: "Billboard Hot 100" }
+  },
+  2017: {
+    1:  { title: "Closer", artist: "The Chainsmokers ft. Halsey", chart: "Billboard Hot 100" },
+    2:  { title: "Shape of You", artist: "Ed Sheeran", chart: "Billboard Hot 100" },
+    3:  { title: "Shape of You", artist: "Ed Sheeran", chart: "Billboard Hot 100" },
+    4:  { title: "That's What I Like", artist: "Bruno Mars", chart: "Billboard Hot 100" },
+    5:  { title: "That's What I Like", artist: "Bruno Mars", chart: "Billboard Hot 100" },
+    6:  { title: "Humble.", artist: "Kendrick Lamar", chart: "Billboard Hot 100" },
+    7:  { title: "Despacito", artist: "Luis Fonsi ft. Daddy Yankee & Justin Bieber", chart: "Billboard Hot 100" },
+    8:  { title: "Despacito", artist: "Luis Fonsi ft. Daddy Yankee & Justin Bieber", chart: "Billboard Hot 100" },
+    9:  { title: "Look What You Made Me Do", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    10: { title: "Bodak Yellow", artist: "Cardi B", chart: "Billboard Hot 100" },
+    11: { title: "Rockstar", artist: "Post Malone ft. 21 Savage", chart: "Billboard Hot 100" },
+    12: { title: "Perfect", artist: "Ed Sheeran", chart: "Billboard Hot 100" }
+  },
+  2018: {
+    1:  { title: "Perfect", artist: "Ed Sheeran", chart: "Billboard Hot 100" },
+    2:  { title: "God's Plan", artist: "Drake", chart: "Billboard Hot 100" },
+    3:  { title: "God's Plan", artist: "Drake", chart: "Billboard Hot 100" },
+    4:  { title: "God's Plan", artist: "Drake", chart: "Billboard Hot 100" },
+    5:  { title: "Nice for What", artist: "Drake", chart: "Billboard Hot 100" },
+    6:  { title: "Nice for What", artist: "Drake", chart: "Billboard Hot 100" },
+    7:  { title: "In My Feelings", artist: "Drake", chart: "Billboard Hot 100" },
+    8:  { title: "In My Feelings", artist: "Drake", chart: "Billboard Hot 100" },
+    9:  { title: "Girls Like You", artist: "Maroon 5 ft. Cardi B", chart: "Billboard Hot 100" },
+    10: { title: "Lucid Dreams", artist: "Juice WRLD", chart: "Billboard Hot 100" },
+    11: { title: "Happier", artist: "Marshmello ft. Bastille", chart: "Billboard Hot 100" },
+    12: { title: "Thank U, Next", artist: "Ariana Grande", chart: "Billboard Hot 100" }
+  },
+  2019: {
+    1:  { title: "Thank U, Next", artist: "Ariana Grande", chart: "Billboard Hot 100" },
+    2:  { title: "Thank U, Next", artist: "Ariana Grande", chart: "Billboard Hot 100" },
+    3:  { title: "7 Rings", artist: "Ariana Grande", chart: "Billboard Hot 100" },
+    4:  { title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus", chart: "Billboard Hot 100" },
+    5:  { title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus", chart: "Billboard Hot 100" },
+    6:  { title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus", chart: "Billboard Hot 100" },
+    7:  { title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus", chart: "Billboard Hot 100" },
+    8:  { title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus", chart: "Billboard Hot 100" },
+    9:  { title: "Bad Guy", artist: "Billie Eilish", chart: "Billboard Hot 100" },
+    10: { title: "Senorita", artist: "Shawn Mendes & Camila Cabello", chart: "Billboard Hot 100" },
+    11: { title: "Circles", artist: "Post Malone", chart: "Billboard Hot 100" },
+    12: { title: "Circles", artist: "Post Malone", chart: "Billboard Hot 100" }
+  },
+  2020: {
+    1:  { title: "Circles", artist: "Post Malone", chart: "Billboard Hot 100" },
+    2:  { title: "Blinding Lights", artist: "The Weeknd", chart: "Billboard Hot 100" },
+    3:  { title: "Blinding Lights", artist: "The Weeknd", chart: "Billboard Hot 100" },
+    4:  { title: "Blinding Lights", artist: "The Weeknd", chart: "Billboard Hot 100" },
+    5:  { title: "The Box", artist: "Roddy Ricch", chart: "Billboard Hot 100" },
+    6:  { title: "Rockstar", artist: "DaBaby ft. Roddy Ricch", chart: "Billboard Hot 100" },
+    7:  { title: "Rockstar", artist: "DaBaby ft. Roddy Ricch", chart: "Billboard Hot 100" },
+    8:  { title: "WAP", artist: "Cardi B ft. Megan Thee Stallion", chart: "Billboard Hot 100" },
+    9:  { title: "Dynamite", artist: "BTS", chart: "Billboard Hot 100" },
+    10: { title: "Positions", artist: "Ariana Grande", chart: "Billboard Hot 100" },
+    11: { title: "Mood", artist: "24kGoldn ft. iann dior", chart: "Billboard Hot 100" },
+    12: { title: "Mood", artist: "24kGoldn ft. iann dior", chart: "Billboard Hot 100" }
+  },
+  2021: {
+    1:  { title: "Positions", artist: "Ariana Grande", chart: "Billboard Hot 100" },
+    2:  { title: "Drivers License", artist: "Olivia Rodrigo", chart: "Billboard Hot 100" },
+    3:  { title: "Drivers License", artist: "Olivia Rodrigo", chart: "Billboard Hot 100" },
+    4:  { title: "Montero (Call Me by Your Name)", artist: "Lil Nas X", chart: "Billboard Hot 100" },
+    5:  { title: "Levitating", artist: "Dua Lipa ft. DaBaby", chart: "Billboard Hot 100" },
+    6:  { title: "Good 4 U", artist: "Olivia Rodrigo", chart: "Billboard Hot 100" },
+    7:  { title: "Good 4 U", artist: "Olivia Rodrigo", chart: "Billboard Hot 100" },
+    8:  { title: "Permission to Dance", artist: "BTS", chart: "Billboard Hot 100" },
+    9:  { title: "Stay", artist: "The Kid LAROI & Justin Bieber", chart: "Billboard Hot 100" },
+    10: { title: "Easy on Me", artist: "Adele", chart: "Billboard Hot 100" },
+    11: { title: "Easy on Me", artist: "Adele", chart: "Billboard Hot 100" },
+    12: { title: "All I Want for Christmas Is You", artist: "Mariah Carey", chart: "Billboard Hot 100" }
+  },
+  2022: {
+    1:  { title: "All I Want for Christmas Is You", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    2:  { title: "Easy on Me", artist: "Adele", chart: "Billboard Hot 100" },
+    3:  { title: "As It Was", artist: "Harry Styles", chart: "Billboard Hot 100" },
+    4:  { title: "As It Was", artist: "Harry Styles", chart: "Billboard Hot 100" },
+    5:  { title: "As It Was", artist: "Harry Styles", chart: "Billboard Hot 100" },
+    6:  { title: "As It Was", artist: "Harry Styles", chart: "Billboard Hot 100" },
+    7:  { title: "As It Was", artist: "Harry Styles", chart: "Billboard Hot 100" },
+    8:  { title: "Running Up That Hill", artist: "Kate Bush", chart: "Billboard Hot 100" },
+    9:  { title: "About Damn Time", artist: "Lizzo", chart: "Billboard Hot 100" },
+    10: { title: "Anti-Hero", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    11: { title: "Anti-Hero", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    12: { title: "Anti-Hero", artist: "Taylor Swift", chart: "Billboard Hot 100" }
+  },
+  2023: {
+    1:  { title: "Anti-Hero", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    2:  { title: "Anti-Hero", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    3:  { title: "Flowers", artist: "Miley Cyrus", chart: "Billboard Hot 100" },
+    4:  { title: "Flowers", artist: "Miley Cyrus", chart: "Billboard Hot 100" },
+    5:  { title: "Ella Baila Sola", artist: "Eslabon Armado & Peso Pluma", chart: "Billboard Hot 100" },
+    6:  { title: "Ella Baila Sola", artist: "Eslabon Armado & Peso Pluma", chart: "Billboard Hot 100" },
+    7:  { title: "Cruel Summer", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    8:  { title: "Cruel Summer", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    9:  { title: "Paint the Town Red", artist: "Doja Cat", chart: "Billboard Hot 100" },
+    10: { title: "Greedy", artist: "Tate McRae", chart: "Billboard Hot 100" },
+    11: { title: "All I Want for Christmas Is You", artist: "Mariah Carey", chart: "Billboard Hot 100" },
+    12: { title: "All I Want for Christmas Is You", artist: "Mariah Carey", chart: "Billboard Hot 100" }
+  },
+  // ── 2024: corrected (original file had months shifted)
+  2024: {
+    1:  { title: "Lovin on Me", artist: "Jack Harlow", chart: "Billboard Hot 100" },
+    2:  { title: "Texas Hold 'Em", artist: "Beyoncé", chart: "Billboard Hot 100" },
+    3:  { title: "Texas Hold 'Em", artist: "Beyoncé", chart: "Billboard Hot 100" },
+    4:  { title: "Beautiful Things", artist: "Benson Boone", chart: "Billboard Hot 100" },
+    5:  { title: "I Had Some Help", artist: "Post Malone ft. Morgan Wallen", chart: "Billboard Hot 100" },
+    6:  { title: "I Had Some Help", artist: "Post Malone ft. Morgan Wallen", chart: "Billboard Hot 100" },
+    7:  { title: "A Bar Song (Tipsy)", artist: "Shaboozey", chart: "Billboard Hot 100" },
+    8:  { title: "A Bar Song (Tipsy)", artist: "Shaboozey", chart: "Billboard Hot 100" },
+    9:  { title: "A Bar Song (Tipsy)", artist: "Shaboozey", chart: "Billboard Hot 100" },
+    10: { title: "A Bar Song (Tipsy)", artist: "Shaboozey", chart: "Billboard Hot 100" },
+    11: { title: "A Bar Song (Tipsy)", artist: "Shaboozey", chart: "Billboard Hot 100" },
+    12: { title: "All I Want for Christmas Is You", artist: "Mariah Carey", chart: "Billboard Hot 100" }
+  },
+  // ── 2025: corrected (original file had 2024 songs mislabeled as 2025)
+  2025: {
+    1:  { title: "Die with a Smile", artist: "Lady Gaga & Bruno Mars", chart: "Billboard Hot 100" },
+    2:  { title: "Die with a Smile", artist: "Lady Gaga & Bruno Mars", chart: "Billboard Hot 100" },
+    3:  { title: "Luther", artist: "Kendrick Lamar & SZA", chart: "Billboard Hot 100" },
+    4:  { title: "Luther", artist: "Kendrick Lamar & SZA", chart: "Billboard Hot 100" },
+    5:  { title: "Luther", artist: "Kendrick Lamar & SZA", chart: "Billboard Hot 100" },
+    6:  { title: "Ordinary", artist: "Alex Warren", chart: "Billboard Hot 100" },
+    7:  { title: "Ordinary", artist: "Alex Warren", chart: "Billboard Hot 100" },
+    8:  { title: "Ordinary", artist: "Alex Warren", chart: "Billboard Hot 100" },
+    9:  { title: "Golden", artist: "Huntrix", chart: "Billboard Hot 100" },
+    10: { title: "The Fate of Ophelia", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    11: { title: "The Fate of Ophelia", artist: "Taylor Swift", chart: "Billboard Hot 100" },
+    12: { title: "All I Want for Christmas Is You", artist: "Mariah Carey", chart: "Billboard Hot 100" }
+  },
+  // ── 2026: new data through June 2026
+  2026: {
+    1:  { title: "I Just Might", artist: "Bruno Mars", chart: "Billboard Hot 100" },
+    2:  { title: "Choosin' Texas", artist: "Ella Langley", chart: "Billboard Hot 100" },
+    3:  { title: "Choosin' Texas", artist: "Ella Langley", chart: "Billboard Hot 100" },
+    4:  { title: "Choosin' Texas", artist: "Ella Langley", chart: "Billboard Hot 100" },
+    5:  { title: "Choosin' Texas", artist: "Ella Langley", chart: "Billboard Hot 100" },
+    6:  { title: "Janice STFU", artist: "Drake", chart: "Billboard Hot 100" }
+  }
+};
+
+// ─────────────────────────────────────────────
+// CONSTANTS
+// ─────────────────────────────────────────────
+
+// Billboard's first chart was July 27, 1940
+const CHART_FLOOR_YEAR  = 1940;
+const CHART_FLOOR_MONTH = 7;
+
+const MONTH_NAMES = [
+  '', 'January','February','March','April','May','June',
+  'July','August','September','October','November','December'
+];
+
+// ─────────────────────────────────────────────
+// CORE FUNCTIONS
+// ─────────────────────────────────────────────
+
+/**
+ * Returns the chart entry for year/month, or null if before data floor.
+ */
+function getEntry(year, month) {
+  if (year < CHART_FLOOR_YEAR) return null;
+  if (year === CHART_FLOOR_YEAR && month < CHART_FLOOR_MONTH) return null;
+  if (!chartData[year]) return null;
+  return chartData[year][month] || null;
+}
+
+/**
+ * Walk backwards by decades from selectedYear, collecting results.
+ * Returns array of { year, month, title, artist, chart }.
+ */
+function getDecadeResults(selectedYear, selectedMonth) {
+  const results = [];
+  let year = selectedYear;
+  // Cap at current year (no future data)
+  const now = new Date();
+  if (year > now.getFullYear()) return results;
+
+  while (year >= CHART_FLOOR_YEAR) {
+    // Skip months before chart floor in 1940
+    if (year === CHART_FLOOR_YEAR && selectedMonth < CHART_FLOOR_MONTH) {
+      year -= 10;
+      continue;
+    }
+    const entry = getEntry(year, selectedMonth);
+    if (entry) {
+      results.push({ year, month: selectedMonth, ...entry });
+    }
+    year -= 10;
+  }
+  return results;
+}
+
+/**
+ * Dynamic age reframe: if someone was born this month/year, how old are they today?
+ * Adjusts for whether their birth month has passed this year.
+ */
+function calculateAge(year, month) {
+  const today    = new Date();
+  const curYear  = today.getFullYear();
+  const curMonth = today.getMonth() + 1; // 1-indexed
+  let age = curYear - year;
+  // If birth month hasn't come yet this calendar year, subtract 1
+  if (month > curMonth) age--;
+  return age;
+}
+
+/**
+ * Build a YouTube search URL for a song.
+ */
+function ytLink(title, artist) {
+  const q = encodeURIComponent(title + ' ' + artist + ' official');
+  return 'https://www.youtube.com/results?search_query=' + q;
+}
+
+// ─────────────────────────────────────────────
+// UI — Populate year/month pickers
+// ─────────────────────────────────────────────
+
+(function populatePickers() {
+  const now       = new Date();
+  const curYear   = now.getFullYear();
+  const curMonth  = now.getMonth() + 1;
+  const yearSel   = document.getElementById('year-select');
+  const monthSel  = document.getElementById('month-select');
+
+  // Years: current down to 1940
+  for (let y = curYear; y >= 1940; y--) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    yearSel.appendChild(opt);
+  }
+
+  // Default month to current month
+  monthSel.value = curMonth;
+
+  // Disable future months when current year is selected
+  function updateMonthOptions() {
+    const selectedYear = parseInt(yearSel.value);
+    for (let i = 0; i < monthSel.options.length; i++) {
+      const m = parseInt(monthSel.options[i].value);
+      // Disable future months in current year
+      monthSel.options[i].disabled =
+        (selectedYear === curYear && m > curMonth);
+      // Also disable months before July 1940
+      if (selectedYear === 1940 && m < 7) {
+        monthSel.options[i].disabled = true;
+      }
+    }
+    // If current selection is now disabled, reset to last valid month
+    if (monthSel.options[monthSel.selectedIndex].disabled) {
+      if (selectedYear === curYear) {
+        monthSel.value = curMonth;
+      } else if (selectedYear === 1940) {
+        monthSel.value = 7;
+      }
+    }
+  }
+
+  yearSel.addEventListener('change', updateMonthOptions);
+  updateMonthOptions();
+})();
+
+// ─────────────────────────────────────────────
+// UI — Render results
+// ─────────────────────────────────────────────
+
+function renderResults(selectedYear, selectedMonth) {
+  const container = document.getElementById('results');
+  container.innerHTML = '';
+
+  const results = getDecadeResults(selectedYear, selectedMonth);
+
+  if (!results.length) {
+    container.innerHTML = '<p class="no-data">No chart data available for this selection.</p>';
+    return;
+  }
+
+  // Header
+  const hdr = document.createElement('p');
+  hdr.className = 'results-header';
+  hdr.textContent = MONTH_NAMES[selectedMonth] + ' — decade by decade';
+  container.appendChild(hdr);
+
+  // Cards
+  results.forEach(function(r, index) {
+    const age = calculateAge(r.year, r.month);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    // YouTube icon SVG (inline, no CDN)
+    const ytIcon = `<svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="14" height="10" rx="2" fill="currentColor" opacity="0.15"/>
+      <polygon points="5.5,2.5 5.5,7.5 9.5,5" fill="currentColor"/>
+    </svg>`;
+
+    card.innerHTML = `
+      <div class="card-main">
+        <div class="card-year">${r.year}</div>
+        <div class="card-title">${escHtml(r.title)}</div>
+        <div class="card-artist">${escHtml(r.artist)}</div>
+        <div class="card-meta">
+          <span class="card-chart">${escHtml(r.chart)}</span>
+          <span class="card-age">Born this month? You'd be ${age} today.</span>
+        </div>
+      </div>
+      <a class="card-yt" href="${ytLink(r.title, r.artist)}" target="_blank" rel="noopener">
+        ${ytIcon} Listen
+      </a>
+    `;
+
+    container.appendChild(card);
+  });
+
+  // Floor note
+  const note = document.createElement('p');
+  note.className = 'floor-note';
+  note.textContent = 'Data begins July 1940 — Billboard\'s first chart date.';
+  container.appendChild(note);
+}
+
+/**
+ * Escape HTML entities for safe insertion.
+ */
+function escHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ─────────────────────────────────────────────
+// UI — Form submission
+// ─────────────────────────────────────────────
+
+document.getElementById('picker-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const errEl = document.getElementById('form-error');
+  errEl.style.display = 'none';
+
+  const month = parseInt(document.getElementById('month-select').value);
+  const year  = parseInt(document.getElementById('year-select').value);
+
+  // Guard: before chart floor
+  if (year === 1940 && month < 7) {
+    errEl.textContent = 'Chart data begins July 1940. Please pick July or later.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Guard: future date
+  const now = new Date();
+  if (year > now.getFullYear() ||
+      (year === now.getFullYear() && month > now.getMonth() + 1)) {
+    errEl.textContent = 'That\'s in the future — no chart data yet!';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  renderResults(year, month);
+
+  // Scroll results into view smoothly
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+</script>
+</body>
+</html>
